@@ -73,7 +73,7 @@ class MagicLookup : AbstractCommand() {
 
         while (!done) {
             Thread.sleep(500)
-
+            println("waiting... ${done} ${response}")
         }
 
 
