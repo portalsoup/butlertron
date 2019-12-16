@@ -82,16 +82,16 @@ class MagicLookup : AbstractCommand() {
 
         val json = JSONObject(response)
         println("raw json $json")
-        return when {
+        when {
             json.has("image_uris") -> {
                 println("has image_uris")
-                json
+                return json
                     .getJSONObject("image_uris")
                     .getString("normal").toString()
             }
             json.has("details") -> {
                 println("has details")
-                json
+                return json
                     .getString("details")
             }
             else -> {
