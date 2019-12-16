@@ -1,11 +1,10 @@
 package com.portalsoup.mrleaguy.commands
 
-import net.dv8tion.jda.api.entities.Emote
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
-import org.json.JSONException
+import okhttp3.*
 import org.json.JSONObject
+import java.io.IOException
 import java.lang.RuntimeException
-import java.net.URL
 
 class MagicLookup : AbstractCommand() {
 
@@ -17,6 +16,8 @@ class MagicLookup : AbstractCommand() {
 
     val noResultsText = "Didn't find the card.  The search could have been too broad to confidently" +
             " pick the correct match, or didn't match any cards at all."
+
+    private val apiClient = OkHttpClient()
 
     override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
         return prefixPredicate(event.message.contentRaw, "mtg")
@@ -46,11 +47,23 @@ class MagicLookup : AbstractCommand() {
             .getString("normal").toString()
 
     fun makeCardRequest(fuzzyName: String) {
-        val response = URL(url +
-                fuzzyName
-                    .toLowerCase()
-                    .replace(" ", "+"))
-            .readText()
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        var response = ""
+
+        apiClient.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println("API failed")
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, r: Response) {
+                response = r.body().toString()
+            }
+
+        })
 
         if (response == "null"|| response.isEmpty()) {
             throw NoResultsFoundException()
