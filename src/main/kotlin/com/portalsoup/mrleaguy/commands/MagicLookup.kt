@@ -60,8 +60,6 @@ class MagicLookup : AbstractCommand() {
 
         apiClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                println("API failed")
-                e.printStackTrace()
                 done = true
             }
 
@@ -87,6 +85,8 @@ class MagicLookup : AbstractCommand() {
                 .getJSONObject("image_uris")
                 .getString("normal").toString()
         } else {
+            println("\nDetails=${JSONObject(response)
+                .getString("details")}\n")
             JSONObject(response)
                 .getString("details")
 
