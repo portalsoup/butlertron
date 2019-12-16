@@ -66,6 +66,7 @@ class MagicLookup : AbstractCommand() {
         })
 
         if (response == "null"|| response.isEmpty()) {
+            println("Failed: response=${response}")
             throw NoResultsFoundException()
         }
     }
