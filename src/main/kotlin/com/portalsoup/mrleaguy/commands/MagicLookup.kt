@@ -60,6 +60,7 @@ class MagicLookup : AbstractCommand() {
             }
 
             override fun onResponse(call: Call, r: Response) {
+                println(r.toString())
                 response = r.body().toString()
             }
 
