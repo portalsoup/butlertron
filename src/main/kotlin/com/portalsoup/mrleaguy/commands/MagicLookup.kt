@@ -54,6 +54,7 @@ class MagicLookup : AbstractCommand() {
             .url(url + fuzzyName)
             .build()
 
+        var done = false
         var response = ""
 
         apiClient.newCall(request).enqueue(object : Callback {
@@ -66,8 +67,12 @@ class MagicLookup : AbstractCommand() {
                 println(r.toString())
                 response = r.body().toString()
             }
-
         })
+
+        while (!done) {
+            Thread.sleep(500)
+        }
+
 
         if (response == "null"|| response.isEmpty()) {
             println("Failed: response=${response}")
