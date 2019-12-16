@@ -61,16 +61,19 @@ class MagicLookup : AbstractCommand() {
             override fun onFailure(call: Call, e: IOException) {
                 println("API failed")
                 e.printStackTrace()
+                done = true
             }
 
             override fun onResponse(call: Call, r: Response) {
                 println(r.toString())
                 response = r.body().toString()
+                done = true
             }
         })
 
         while (!done) {
             Thread.sleep(500)
+
         }
 
 
