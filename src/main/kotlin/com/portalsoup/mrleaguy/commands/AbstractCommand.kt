@@ -13,7 +13,6 @@ abstract class AbstractCommand {
      */
     open fun shouldRun(event: GuildMessageReceivedEvent) : Boolean {
         return try {
-            val message = event.message.contentRaw
             val guild = event.guild
             val channel = event.channel
 

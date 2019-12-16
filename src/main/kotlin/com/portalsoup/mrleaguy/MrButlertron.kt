@@ -15,6 +15,6 @@ class MrButlertron(private val token: String) {
             .setToken(token)
             .setAutoReconnect(true)
 
-        val jda = jdaBuilder.build().awaitReady()
+        jdaBuilder.build().awaitReady()
     }
 }
