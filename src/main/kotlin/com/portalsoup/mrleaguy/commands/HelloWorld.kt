@@ -9,6 +9,8 @@ class HelloWorld : AbstractCommand() {
     }
 
     override fun run(event: GuildMessageReceivedEvent) {
-        event.channel.sendMessage("Hello, Wesley}!").queue()
+        event.channel.sendMessage("Hello...").queue()
+        Thread.sleep(1000)
+        event.channel.sendMessage("Wesley!").queue()
     }
 }

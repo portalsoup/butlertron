@@ -6,7 +6,7 @@ import org.json.JSONObject
 import java.io.IOException
 import java.lang.RuntimeException
 
-class MagicLookup : AbstractCommand() {
+class MagicLookup : AbstractCommand("$") {
 
     val url = "https://api.scryfall.com/cards/named\\?fuzzy\\="
 
@@ -19,8 +19,8 @@ class MagicLookup : AbstractCommand() {
 
     private val apiClient = OkHttpClient()
 
-    override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
-        return prefixPredicate(event.message.contentRaw, "mtg")
+    override fun runPredicate(event: GuildMessageReceivedEvent, label: String): Boolean {
+        return prefixPredicate(event.message.contentRaw, label)
     }
 
     override fun run(event: GuildMessageReceivedEvent) {

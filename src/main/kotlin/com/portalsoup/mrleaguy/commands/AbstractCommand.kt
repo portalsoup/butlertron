@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 
 
-abstract class AbstractCommand {
+abstract class AbstractCommand(val label: String) {
 
     val unexpectedFailureMessage = "Caught an unexpected message"
 
@@ -23,7 +23,7 @@ abstract class AbstractCommand {
             }
 
             when {
-                runPredicate(event) -> {
+                runPredicate(event, label) -> {
                     run(event)
                     true
                 }
@@ -45,7 +45,7 @@ abstract class AbstractCommand {
 
 
     // These two must only be used here to make sure no exceptions kill the bot
-    protected abstract fun runPredicate(event: GuildMessageReceivedEvent) : Boolean
+    protected abstract fun runPredicate(event: GuildMessageReceivedEvent, label: String) : Boolean
     protected abstract fun run(event: GuildMessageReceivedEvent)
 
     // helpers

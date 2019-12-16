@@ -24,7 +24,7 @@ class EventListener(val bot: MrButlertron) : ListenerAdapter() {
         val channel = event.channel
         val permissionToPost = guild.selfMember.hasPermission(channel, Permission.MESSAGE_WRITE)
 
-        if (event.author.isBot || !permissionToPost) {
+        if (event.message.author.isBot || !permissionToPost) {
             return
         }
 
