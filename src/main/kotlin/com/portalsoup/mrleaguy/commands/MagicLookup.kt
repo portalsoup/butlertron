@@ -29,6 +29,7 @@ class MagicLookup : AbstractCommand() {
                     event.message.contentRaw
                         .toLowerCase()
                         .substring(3)
+                        .trim()
                         .replace(" ", "+")
                 )
             ).queue()
