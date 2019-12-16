@@ -82,7 +82,7 @@ class MagicLookup : AbstractCommand() {
             throw NoResultsFoundException()
         }
 
-        val uriOrDetails = if (success) {
+        return if (success) {
             JSONObject(response)
                 .getJSONObject("image_uris")
                 .getString("normal").toString()
