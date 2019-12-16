@@ -68,7 +68,9 @@ class MagicLookup : AbstractCommand() {
             }
         })
 
+        print("Waiting ")
         while (!done) {
+            print(".")
             Thread.sleep(500)
         }
 
