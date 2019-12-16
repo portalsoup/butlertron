@@ -65,8 +65,8 @@ class MagicLookup : AbstractCommand() {
             }
 
             override fun onResponse(call: Call, r: Response) {
-                println("Body ${r.body()!!.string()}")
                 response = r.body()!!.string()
+                println(response)
                 done = true
             }
         })
