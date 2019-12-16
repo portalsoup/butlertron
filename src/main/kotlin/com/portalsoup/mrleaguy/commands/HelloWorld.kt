@@ -5,10 +5,10 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 class HelloWorld : AbstractCommand() {
 
     override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
-        return event.message.contentRaw.toLowerCase().startsWith("mr leaguy")
+        return prefixPredicate(event.message.contentRaw, "mr butlertron")
     }
 
     override fun run(event: GuildMessageReceivedEvent) {
-        event.channel.sendMessage("Hello, ${event.message.author.name}!")
+        event.channel.sendMessage("Hello, ${event.message.author.name}!").queue()
     }
 }
