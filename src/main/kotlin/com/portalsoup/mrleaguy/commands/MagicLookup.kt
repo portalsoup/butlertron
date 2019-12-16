@@ -24,12 +24,13 @@ class MagicLookup : AbstractCommand() {
     }
 
     override fun run(event: GuildMessageReceivedEvent) {
+        println("Raw message=${event.message.contentRaw}")
         try {
             event.channel.sendMessage(
                 getCardUrl(
                     event.message.contentRaw
                         .toLowerCase()
-                        .substring(3)
+                        .substring(2)
                         .trim()
                         .replace(" ", "+")
                 )
