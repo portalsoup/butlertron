@@ -30,7 +30,8 @@ abstract class AbstractCommand {
                 else -> false
             }
         } catch (e: Exception) {
-            println(unexpectedFailureMessage + ": " + e.message + "\n" + e.stackTrace)
+            println(unexpectedFailureMessage + ": " + e.message + "\n")
+            e.printStackTrace()
             false
         }
     }
