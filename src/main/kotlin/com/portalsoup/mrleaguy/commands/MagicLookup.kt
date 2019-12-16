@@ -47,7 +47,7 @@ class MagicLookup : AbstractCommand() {
             .getJSONObject("image_uris")
             .getString("normal").toString()
 
-    fun makeCardRequest(fuzzyName: String) {
+    fun makeCardRequest(fuzzyName: String): String {
         val request = Request.Builder()
             .url(url + fuzzyName)
             .build()
@@ -71,6 +71,8 @@ class MagicLookup : AbstractCommand() {
             println("Failed: response=${response}")
             throw NoResultsFoundException()
         }
+
+        return response
     }
 
     private class NoResultsFoundException: RuntimeException()
