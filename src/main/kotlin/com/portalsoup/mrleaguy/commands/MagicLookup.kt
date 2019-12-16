@@ -54,20 +54,28 @@ class MagicLookup : AbstractCommand() {
             .url(url + fuzzyName)
             .build()
 
+        var done = false
         var response = ""
 
         apiClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 println("API failed")
                 e.printStackTrace()
+                done = true
             }
 
             override fun onResponse(call: Call, r: Response) {
-                println(r.toString())
-                response = r.body().toString()
+                response = r.body()!!.string()
+                println(response)
+                done = true
             }
-
         })
+
+        while (!done) {
+            Thread.sleep(500)
+            println("waiting... ${done} ${response}")
+        }
+
 
         if (response.isEmpty() || response == "null") {
             println("Failed: response=${response}")
