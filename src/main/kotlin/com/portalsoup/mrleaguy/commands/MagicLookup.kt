@@ -40,7 +40,7 @@ class MagicLookup : AbstractCommand() {
         } catch (e: NoResultsFoundException) {
             event.channel.sendMessage(noResultsText).queue()
         } catch (e2: RuntimeException) {
-//            event.channel.addReactionById(event.message.id, Emote())
+            event.channel.addReactionById(event.message.id, "❌")
         }
     }
 
