@@ -26,15 +26,17 @@ class MagicLookup : AbstractCommand() {
     override fun run(event: GuildMessageReceivedEvent) {
         println("Raw message=${event.message.contentRaw}")
         try {
-            event.channel.sendMessage(
-                getCardUrl(
-                    event.message.contentRaw
-                        .toLowerCase()
-                        .substring(3)
-                        .trim()
-                        .replace(" ", "+")
-                )
-            ).queue()
+            val term = event.message.contentRaw
+                .toLowerCase()
+                .substring(3)
+                .trim()
+                .replace(" ", "+")
+            println("term: ${term}")
+
+            val cardUrl = getCardUrl(term)
+            println("cardUrl: ${cardUrl}")
+
+            event.channel.sendMessage(cardUrl).queue()
         } catch (e: NoResultsFoundException) {
             event.channel.sendMessage(noResultsText).queue()
         } catch (e2: RuntimeException) {
