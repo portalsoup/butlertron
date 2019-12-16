@@ -33,7 +33,7 @@ class MagicLookup : AbstractCommand() {
                 .replace(" ", "+")
             println("term: ${term}")
 
-            val cardUrl = getCardUrl(term)
+            val cardUrl = makeCardRequest(term)
             println("cardUrl: ${cardUrl}")
 
             event.channel.sendMessage(cardUrl).queue()
@@ -43,11 +43,6 @@ class MagicLookup : AbstractCommand() {
             event.channel.addReactionById(event.message.id, "❌")
         }
     }
-
-    fun getCardUrl(fuzzyName: String): String =
-        JSONObject(makeCardRequest(fuzzyName))
-            .getJSONObject("image_uris")
-            .getString("normal").toString()
 
     fun makeCardRequest(fuzzyName: String): String {
         val request = Request.Builder()
