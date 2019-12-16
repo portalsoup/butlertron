@@ -82,22 +82,25 @@ class MagicLookup : AbstractCommand() {
 
         val json = JSONObject(response)
         println("raw json $json")
-        when {
+        val extractedJson: String = when {
             json.has("image_uris") -> {
                 println("has image_uris")
-                return json
+                json
                     .getJSONObject("image_uris")
                     .getString("normal").toString()
             }
             json.has("details") -> {
                 println("has details")
-                return json
+                json
                     .getString("details")
             }
             else -> {
                 throw RuntimeException()
             }
         }
+
+        println("Extracted ${extractedJson}")
+        return extractedJson
     }
 
     private class NoResultsFoundException: RuntimeException()
