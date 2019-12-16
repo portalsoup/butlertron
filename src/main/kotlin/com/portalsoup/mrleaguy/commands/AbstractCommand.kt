@@ -21,14 +21,7 @@ abstract class AbstractCommand {
             if (!permissionToPost) {
                 return false
             }
-
-            when {
-                runPredicate(event) -> {
-                    run(event)
-                    true
-                }
-                else -> false
-            }
+            return runPredicate(event)
         } catch (e: Exception) {
             println(unexpectedFailureMessage + ": " + e.message + "\n")
             e.printStackTrace()
