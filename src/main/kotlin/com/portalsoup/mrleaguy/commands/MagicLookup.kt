@@ -55,6 +55,7 @@ class MagicLookup : AbstractCommand() {
             .build()
 
         var done = false
+        var success = false
         var response = ""
 
         apiClient.newCall(request).enqueue(object : Callback {
@@ -66,7 +67,7 @@ class MagicLookup : AbstractCommand() {
 
             override fun onResponse(call: Call, r: Response) {
                 response = r.body()!!.string()
-                println(response)
+                success = true
                 done = true
             }
         })
@@ -76,13 +77,20 @@ class MagicLookup : AbstractCommand() {
             println("waiting... ${done} ${response}")
         }
 
-
         if (response.isEmpty() || response == "null") {
             println("Failed: response=${response}")
             throw NoResultsFoundException()
         }
 
-        return response
+        val uriOrDetails = if (success) {
+            JSONObject(response)
+                .getJSONObject("image_uris")
+                .getString("normal").toString()
+        } else {
+            JSONObject(response)
+                .getString("details")
+
+        }
     }
 
     private class NoResultsFoundException: RuntimeException()
