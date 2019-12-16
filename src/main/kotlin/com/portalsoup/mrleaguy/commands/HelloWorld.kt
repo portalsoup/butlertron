@@ -9,6 +9,6 @@ class HelloWorld : AbstractCommand() {
     }
 
     override fun run(event: GuildMessageReceivedEvent) {
-        event.channel.sendMessage("Hello, ${event.message.author.name}!").queue()
+        event.channel.sendMessage("Hello, Wesley}!").queue()
     }
 }

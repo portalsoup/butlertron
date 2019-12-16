@@ -30,7 +30,7 @@ class MagicLookup : AbstractCommand() {
                 getCardUrl(
                     event.message.contentRaw
                         .toLowerCase()
-                        .substring(2)
+                        .substring(3)
                         .trim()
                         .replace(" ", "+")
                 )
@@ -49,7 +49,7 @@ class MagicLookup : AbstractCommand() {
 
     fun makeCardRequest(fuzzyName: String) {
         val request = Request.Builder()
-            .url(url)
+            .url(url + fuzzyName)
             .build()
 
         var response = ""

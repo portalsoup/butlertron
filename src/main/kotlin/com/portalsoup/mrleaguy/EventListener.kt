@@ -11,10 +11,11 @@ class EventListener(val bot: MrButlertron) : ListenerAdapter() {
     var currentIndex = 0
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-
         if (history.contains(event.message.id)) {
+            println("Found a duplicate!  ${event.message.id}")
             return
         } else {
+            println("Adding ${event.message.id} to index=${currentIndex}")
             history[currentIndex] = event.message.id
             incrementHistoryCounter()
         }
