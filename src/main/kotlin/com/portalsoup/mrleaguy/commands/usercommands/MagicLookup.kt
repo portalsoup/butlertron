@@ -2,6 +2,7 @@ package com.portalsoup.mrleaguy.commands.usercommands
 
 import com.portalsoup.mrleaguy.commands.ApiCommand
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
+import org.json.JSONObject
 import java.lang.RuntimeException
 
 class MagicLookup : ApiCommand() {
@@ -37,7 +38,7 @@ class MagicLookup : ApiCommand() {
     }
 
     fun makeCardRequest(fuzzyName: String): String {
-        val json = makeRequest(url + fuzzyName)
+        val json = JSONObject(makeRequest(url + fuzzyName))
         println("raw json $json")
         val extractedJson: String = when {
             json.has("image_uris") -> {

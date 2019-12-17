@@ -2,6 +2,9 @@ package com.portalsoup.mrleaguy.commands.usercommands
 
 import com.portalsoup.mrleaguy.commands.ApiCommand
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 import java.lang.RuntimeException
 
 class YugiohLookup : ApiCommand() {
@@ -33,26 +36,20 @@ class YugiohLookup : ApiCommand() {
 
     fun makeCardRequest(fuzzyName: String): String {
 
-        val json = makeRequest(url + fuzzyName)
-        println("raw json $json")
-        val extractedJson: String = when {
-            json.has("card_images") -> {
-                println("has card_images")
-                json
-                    .getJSONObject("0")
-                    .getString("image_url").toString()
-            }
-            json.has("error") -> {
-                println("has error")
-                json
-                    .getString("No match.")
-            }
-            else -> {
-                throw RuntimeException()
-            }
+        val response = makeRequest(url + fuzzyName)
+        println("raw response $response")
+
+        val url = try {
+            JSONArray(response)
+                .getJSONObject(0)
+                .getJSONObject("card_images")
+                .getJSONObject("0")
+                .getString("image_url")
+        } catch (e: JSONException) {
+            "No match"
         }
 
-        println("Extracted ${extractedJson}")
-        return extractedJson
+        println("Extracted ${url}")
+        return url
     }
 }

@@ -1,7 +1,6 @@
 package com.portalsoup.mrleaguy.commands
 
 import okhttp3.*
-import org.json.JSONObject
 import java.io.IOException
 import java.lang.RuntimeException
 
@@ -10,7 +9,7 @@ abstract class ApiCommand : AbstractCommand() {
 
     private val apiClient = OkHttpClient()
 
-    fun makeRequest(url: String): JSONObject {
+    fun makeRequest(url: String): String {
         try {
             val request = Request.Builder()
                 .url(url)
@@ -43,7 +42,7 @@ abstract class ApiCommand : AbstractCommand() {
             }
 
             println("Returning")
-            return JSONObject(response)
+            return response
         } catch (e: RuntimeException) {
             println("FAILED!" + e.message)
             e.printStackTrace()
