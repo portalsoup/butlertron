@@ -19,7 +19,7 @@ class YugiohLookup : ApiCommand() {
                 .toLowerCase()
                 .substring(3)
                 .trim()
-                .replace(" ", "+")
+                .replace(" ", "%20")
             println("term: ${term}")
 
             val cardUrl = makeCardRequest(term)
