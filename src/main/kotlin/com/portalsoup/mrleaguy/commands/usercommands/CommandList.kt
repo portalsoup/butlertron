@@ -19,7 +19,7 @@ class CommandList : AbstractCommand() {
             val reflections = Reflections().getSubTypesOf(AbstractCommand::class.java)
             println("Found ${reflections.size} commands")
             for (r in reflections) {
-                if (r.simpleName == AbstractCommand::class.java.simpleName) {
+                if (r.simpleName.toLowerCase().contains("abstractcommand")) {
                     break
                 }
                 print("Instantiating ${r.simpleName}... ")
