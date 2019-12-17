@@ -20,6 +20,7 @@ class CommandList : AbstractCommand() {
                 .filter { c: Class<out AbstractCommand> -> c.simpleName != AbstractCommand::class.java.simpleName }
             println("Found ${reflections.size} commands")
             for (r in reflections) {
+                println("from r=${r.simpleName} from java=${AbstractCommand::class.java.simpleName}")
                 print("Instantiating ${r.simpleName}... ")
                 cmdList + r.newInstance().syntaxDescription() + "\n"
                 println("Instantiated")
