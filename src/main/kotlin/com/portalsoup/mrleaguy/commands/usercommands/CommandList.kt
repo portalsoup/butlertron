@@ -10,16 +10,25 @@ class CommandList : AbstractCommand() {
 
     override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
         val sanitized = event.message.contentRaw.trim().toLowerCase()
-        return sanitized.equals("help mr butlertron") || sanitized.equals("help mr. butlertron")
+        return sanitized == "help mr butlertron" || sanitized == "help mr. butlertron"
     }
 
     fun getCommandList(): String {
-        var cmdList = ""
-        val reflections = Reflections().getSubTypesOf(AbstractCommand::class.java)
-        for (r in reflections) {
-            cmdList + r.newInstance().syntaxDescription() + "\n"
+        try {
+            val cmdList = ""
+            val reflections = Reflections().getSubTypesOf(AbstractCommand::class.java)
+            println("Found ${reflections.size} commands")
+            for (r in reflections) {
+                cmdList + r.newInstance().syntaxDescription() + "\n"
+                println("Instantiated ${r.simpleName}")
+            }
+            println("cmdList=$cmdList")
+            return cmdList
+        } catch (e: RuntimeException) {
+            println("Failed: ${e.message}")
+            e.printStackTrace()
+            throw e
         }
-        return cmdList
     }
 
     override fun run(event: GuildMessageReceivedEvent) {
