@@ -4,6 +4,7 @@ import com.portalsoup.mrleaguy.commands.AbstractCommand
 import com.portalsoup.mrleaguy.commands.ApiCommand
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.reflections.Reflections
+import java.lang.StringBuilder
 
 class CommandList : AbstractCommand() {
 
@@ -16,7 +17,7 @@ class CommandList : AbstractCommand() {
 
     fun getCommandList(): String {
         try {
-            val cmdList = ""
+            val cmdList = StringBuilder()
             val reflections = Reflections().getSubTypesOf(AbstractCommand::class.java)
                 .filter { c: Class<out AbstractCommand> -> c.simpleName != AbstractCommand::class.java.simpleName }
                 .filter { c: Class<out AbstractCommand> -> c.simpleName != ApiCommand::class.java.simpleName }
@@ -25,11 +26,11 @@ class CommandList : AbstractCommand() {
             for (r in reflections) {
                 println("from r=${r.simpleName} from java=${AbstractCommand::class.java.simpleName}")
                 print("Instantiating ${r.simpleName}... ")
-                cmdList + r.newInstance().syntaxDescription() + "\n"
+                cmdList.append(r.newInstance().syntaxDescription()).append("\n")
                 println("Instantiated")
             }
             println("cmdList=$cmdList")
-            return cmdList
+            return cmdList.toString()
         } catch (e: RuntimeException) {
             println("Failed: ${e.message}")
             e.printStackTrace()
