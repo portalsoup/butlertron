@@ -40,11 +40,17 @@ class YugiohLookup : ApiCommand() {
         println("raw response $response")
 
         val url = try {
-            JSONArray(response)
-                .getJSONObject(0)
-                .getJSONObject("card_images")
-                .getJSONObject("0")
-                .getString("image_url")
+            val outerArray = JSONArray(response)
+            println("Is an array")
+            val firstMatch = outerArray.getJSONObject(0)
+            println("first match=$firstMatch")
+            val imagesArray = firstMatch.getJSONObject("card_images")
+            println("images array size ${imagesArray.length()}")
+            val firstImage = imagesArray.getJSONObject("0")
+            println("first image found")
+            val imageUrl = firstImage.getString("image_url")
+            println("imageUrl=${imageUrl}")
+            imageUrl
         } catch (e: JSONException) {
             "No match"
         }
