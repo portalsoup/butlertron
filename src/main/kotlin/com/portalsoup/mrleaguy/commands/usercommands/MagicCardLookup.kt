@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.json.JSONObject
 import java.lang.RuntimeException
 
-class MagicLookup : ApiCommand() {
+class MagicCardLookup : ApiCommand() {
 
     val url = "https://api.scryfall.com/cards/named?fuzzy="
 

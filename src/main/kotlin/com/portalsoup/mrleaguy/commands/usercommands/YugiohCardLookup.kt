@@ -7,11 +7,11 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.lang.RuntimeException
 
-class YugiohLookup : ApiCommand() {
+class YugiohCardLookup : ApiCommand() {
 
     private val url = "https://db.ygoprodeck.com/api/v5/cardinfo.php?fname="
     override fun syntaxDescription(): String =
-        "ygo {card-name}"
+        "ygo {card-name} -- When punctuation is involved, exact formatting must be used around it"
 
     override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
         return prefixPredicate(event.message.contentRaw, "ygo")

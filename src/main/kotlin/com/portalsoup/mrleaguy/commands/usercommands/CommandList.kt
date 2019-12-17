@@ -21,6 +21,7 @@ class CommandList : AbstractCommand() {
             val reflections = Reflections().getSubTypesOf(AbstractCommand::class.java)
                 .filter { c: Class<out AbstractCommand> -> c.simpleName != AbstractCommand::class.java.simpleName }
                 .filter { c: Class<out AbstractCommand> -> c.simpleName != ApiCommand::class.java.simpleName }
+                .filter { c: Class<out AbstractCommand> -> c.name.contains("examples")}
 
             println("Found ${reflections.size} commands")
             for (r in reflections) {
