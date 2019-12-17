@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 
 abstract class AbstractCommand {
 
+    abstract fun syntaxDescription(): String
+
     val unexpectedFailureMessage = "Caught an unexpected message"
 
     /**

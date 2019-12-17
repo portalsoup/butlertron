@@ -10,6 +10,8 @@ import java.lang.RuntimeException
 class YugiohLookup : ApiCommand() {
 
     private val url = "https://db.ygoprodeck.com/api/v5/cardinfo.php?fname="
+    override fun syntaxDescription(): String =
+        "ygo {card-name}"
 
     override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
         return prefixPredicate(event.message.contentRaw, "ygo")

@@ -12,6 +12,9 @@ class MagicLookup : ApiCommand() {
     val noResultsText = "Didn't find the card.  The search could have been too broad to confidently" +
             " pick the correct match, or didn't match any cards at all."
 
+    override fun syntaxDescription(): String =
+        "mtg {card-name}"
+
     override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
         return prefixPredicate(event.message.contentRaw, "mtg")
     }

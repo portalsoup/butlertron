@@ -1,5 +1,7 @@
 package com.portalsoup.mrleaguy
 
+import com.portalsoup.mrleaguy.commands.AbstractCommand
+import com.portalsoup.mrleaguy.commands.usercommands.CommandList
 import com.portalsoup.mrleaguy.commands.usercommands.MagicLookup
 import com.portalsoup.mrleaguy.commands.usercommands.YugiohLookup
 import net.dv8tion.jda.api.AccountType
@@ -7,9 +9,10 @@ import net.dv8tion.jda.api.JDABuilder
 
 class MrButlertron(private val token: String) {
 
-    val commands = listOf(
+    val commands: List<AbstractCommand> = listOf(
         MagicLookup(),
-        YugiohLookup()
+        YugiohLookup(),
+        CommandList()
     )
 
     fun run() {

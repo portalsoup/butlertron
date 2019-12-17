@@ -15,6 +15,7 @@ dependencies {
     compile "net.dv8tion:JDA:4.0.0_76"
     compile group: 'org.json', name: 'json', version: '20190722'
     implementation 'com.squareup.okhttp3:okhttp:3.8.1'
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
 }
 
 compileKotlin {
