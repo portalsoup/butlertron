@@ -5,14 +5,16 @@ import com.portalsoup.mrbutlertron.commands.messagereceived.GuildMessageReceived
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import java.lang.StringBuilder
 
-class CommandList : GuildMessageReceivedCommand("Command List") {
+class CommandList : GuildMessageReceivedCommand() {
 
-    override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
-        val sanitized = event.message.contentRaw.trim().toLowerCase()
-        val matches = sanitized.contains("help") &&
-                sanitized.contains("mr") &&
-                sanitized.contains("butlertron")
-        return matches
+    init {
+        addPrecondition {
+            val sanitized = it.message.contentRaw.trim().toLowerCase()
+            val matches = sanitized.contains("help") &&
+                    sanitized.contains("mr") &&
+                    sanitized.contains("butlertron")
+            matches
+        }
     }
 
     fun getCommandList(): String {

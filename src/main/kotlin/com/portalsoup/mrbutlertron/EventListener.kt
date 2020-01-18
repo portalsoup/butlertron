@@ -43,9 +43,7 @@ class EventListener(private val bot: MrButlertron) : ListenerAdapter() {
     }
 
     private fun <E : Event> parseCommand(command: AbstractCommand<E>, event: E) {
-        if (command.shouldRun(event)) {
-            command.doRun(event)
-        }
+       command.tryRun(event)
     }
 
     fun incrementHistoryCounter() {

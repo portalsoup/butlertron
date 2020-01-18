@@ -3,16 +3,15 @@ package com.portalsoup.mrbutlertron.commands.messagereceived.usercommands
 import com.portalsoup.mrbutlertron.commands.messagereceived.GuildMessageReceivedCommand
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 
-class ButlertronQuotes : GuildMessageReceivedCommand("Butlertron Quotes") {
+class ButlertronQuotes : GuildMessageReceivedCommand() {
 
-    override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
-        return runIf(event.message.contentRaw)
+    init {
+        addPrecondition { runIf(it.message.contentRaw) }
     }
 
     fun runIf(message: String): Boolean {
         val sanitized = message.trim().toLowerCase()
-        return  sanitized.contains("mr") &&
-                sanitized.contains("butlertron")
+        return sanitized.matches(Regex("mr\\s*butlertron"))
     }
 
     override fun run(event: GuildMessageReceivedEvent) {

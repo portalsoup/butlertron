@@ -7,15 +7,15 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.json.JSONObject
 import java.lang.RuntimeException
 
-class MagicCardLookup : GuildMessageReceivedCommand("MTG Card Lookup"), Requestable by ApiRequester() {
+class MagicCardLookup : GuildMessageReceivedCommand(), Requestable by ApiRequester() {
 
     val url = "https://api.scryfall.com/cards/named?fuzzy="
 
     val noResultsText = "Didn't find the card.  The search could have been too broad to confidently" +
             " pick the correct match, or didn't match any cards at all."
 
-    override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
-        return prefixPredicate(event.message.contentRaw, "mtg")
+    init {
+        addPrecondition { prefixPredicate(it.message.contentRaw, "mtg") }
     }
 
     override fun run(event: GuildMessageReceivedEvent) {

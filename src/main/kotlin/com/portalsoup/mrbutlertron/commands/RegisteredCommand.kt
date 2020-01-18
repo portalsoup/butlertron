@@ -12,9 +12,12 @@ val additionalDetails: String?) {
         "Say my name.",
         null),
     YGO_LOOKUP("YuGiOh Card Lookup",
-        "ygo {card-name}",
+        "`ygo {card-name}`",
         "When punctuation is involved, exact formatting must be used around it!"),
     MTG_LOOKUP("MTG Card Lookup",
-        "mtg {card-name}",
+        "`mtg {card-name}`",
+        null),
+    CHUCK_NORRIS("Chuck Norris",
+        "Barrens chat is best chat",
         null)
 }

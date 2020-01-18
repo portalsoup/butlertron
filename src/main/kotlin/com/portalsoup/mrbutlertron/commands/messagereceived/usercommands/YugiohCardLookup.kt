@@ -8,13 +8,13 @@ import org.json.JSONArray
 import org.json.JSONException
 import java.lang.RuntimeException
 
-class YugiohCardLookup : GuildMessageReceivedCommand("YGO Card Lookup"),
+class YugiohCardLookup : GuildMessageReceivedCommand(),
     Requestable by ApiRequester() {
 
     private val url = "https://db.ygoprodeck.com/api/v5/cardinfo.php?fname="
 
-    override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
-        return prefixPredicate(event.message.contentRaw, "ygo")
+    init {
+        addPrecondition { prefixPredicate(it.message.contentRaw, "ygo") }
     }
 
     override fun run(event: GuildMessageReceivedEvent) {
