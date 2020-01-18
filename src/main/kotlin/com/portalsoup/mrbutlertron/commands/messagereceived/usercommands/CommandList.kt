@@ -1,6 +1,5 @@
 package com.portalsoup.mrbutlertron.commands.messagereceived.usercommands
 
-import com.portalsoup.mrbutlertron.commands.RegisteredCommand
 import com.portalsoup.mrbutlertron.commands.messagereceived.GuildMessageReceivedCommand
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import java.lang.StringBuilder
@@ -41,4 +40,29 @@ class CommandList : GuildMessageReceivedCommand() {
         return "${command.commandName} - ${command.description}${if (command.additionalDetails != null) "\n -- ${command.additionalDetails}" else ""}\n\n"
     }
 
+    /**
+     * Only commands defined by this enum will show up in the public help.  A command can be made more secret by
+     * omitting it from this enum.  Consequently, omitted commands will only be organically discoverable.
+     */
+    private enum class RegisteredCommand(
+        val commandName: String,
+        val description: String,
+        val additionalDetails: String?) {
+
+        GREET_NEW_MEMBERS("Greet New Members",
+            "I do this automatically",
+            null),
+        BUTLERTRON_QUOTES("Butlertron Quotes",
+            "Say my name.",
+            null),
+        YGO_LOOKUP("YuGiOh Card Lookup",
+            "`ygo {card-name}`",
+            "When punctuation is involved, exact formatting must be used around it!"),
+        MTG_LOOKUP("MTG Card Lookup",
+            "`mtg {card-name}`",
+            null),
+        CHUCK_NORRIS("Chuck Norris",
+            "Barrens chat is best chat",
+            null)
+    }
 }
