@@ -1,0 +1,19 @@
+version: '3'
+services:
+  bot:
+    build: .
+#    networks:
+#      - butlertron
+    volumes:
+      - ".:/data"
+    ports:
+      - "80:80"
+    env_file: .env
+#  jenkins:
+#    image: jenkins/jenkins:lts-alpine
+#    networks:
+#      - butlertron
+#    ports:
+#      - "8080:8080"
+#networks:
+#  butlertron:

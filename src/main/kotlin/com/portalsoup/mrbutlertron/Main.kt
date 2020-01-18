@@ -1,11 +1,10 @@
-package com.portalsoup.mrleaguy
-
-import net.dv8tion.jda.api.AccountType
-import net.dv8tion.jda.api.JDABuilder
+package com.portalsoup.mrbutlertron
 
 fun main(args: Array<String>) {
     println("Loading ENV")
     val token = System.getenv("BOT_TOKEN")
+    token.replace("\"","")
+    println("token: ${token}")
 
     println("Starting bot")
     val bot = MrButlertron(token)

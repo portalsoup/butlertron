@@ -1,11 +1,14 @@
-package com.portalsoup.mrleaguy
+package com.portalsoup.mrbutlertron
 
+import com.portalsoup.mrbutlertron.commands.messagereceived.GuildMessageReceivedCommand
+import com.portalsoup.mrbutlertron.core.command.AbstractCommand
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.events.Event
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import org.apache.commons.collections4.queue.CircularFifoQueue
 
-class EventListener(val bot: MrButlertron) : ListenerAdapter() {
+class EventListener(private val bot: MrButlertron) : ListenerAdapter() {
 
     val history: Array<String> = arrayOf("","","","","","","","","","")
     var currentIndex = 0
@@ -29,9 +32,19 @@ class EventListener(val bot: MrButlertron) : ListenerAdapter() {
         }
 
         for (command in bot.commands) {
-            if (command.shouldRun(event)) {
-                command.doRun(event)
+            if (command is GuildMessageReceivedCommand) {
+                parseCommand(command, event)
             }
+        }
+    }
+
+    override fun onGuildJoin(event: GuildJoinEvent) {
+
+    }
+
+    private fun <E : Event> parseCommand(command: AbstractCommand<E>, event: E) {
+        if (command.shouldRun(event)) {
+            command.doRun(event)
         }
     }
 

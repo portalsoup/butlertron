@@ -1,21 +1,18 @@
-package com.portalsoup.mrleaguy.commands.usercommands
+package com.portalsoup.mrbutlertron.commands.messagereceived.usercommands
 
-import com.portalsoup.mrleaguy.commands.AbstractCommand
+import com.portalsoup.mrbutlertron.commands.messagereceived.GuildMessageReceivedCommand
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 
-class ButlertronQuotes : AbstractCommand() {
-
-    override fun syntaxDescription(): String {
-        return "Want a quote?  Say my name."
-    }
+class ButlertronQuotes : GuildMessageReceivedCommand("Butlertron Quotes") {
 
     override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
         return runIf(event.message.contentRaw)
     }
 
     fun runIf(message: String): Boolean {
-        val sanitizedMessage = message.trim().toLowerCase()
-        return sanitizedMessage.startsWith("mr butlertron") || sanitizedMessage.startsWith("mr. butlertron")
+        val sanitized = message.trim().toLowerCase()
+        return  sanitized.contains("mr") &&
+                sanitized.contains("butlertron")
     }
 
     override fun run(event: GuildMessageReceivedEvent) {

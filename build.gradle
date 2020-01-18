@@ -26,6 +26,6 @@ compileTestKotlin {
 }
 
 task run(type: JavaExec) {
-    main = "com.portalsoup.mrleaguy.MainKt"
+    main = "com.portalsoup.mrbutlertron.MainKt"
     classpath = sourceSets.main.runtimeClasspath
 }

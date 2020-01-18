@@ -1,17 +1,17 @@
-package com.portalsoup.mrleaguy.commands.usercommands
+package com.portalsoup.mrbutlertron.commands.messagereceived.usercommands
 
-import com.portalsoup.mrleaguy.commands.ApiCommand
+import com.portalsoup.mrbutlertron.commands.messagereceived.GuildMessageReceivedCommand
+import com.portalsoup.mrbutlertron.core.command.delegates.types.Requestable
+import com.portalsoup.mrbutlertron.core.command.delegates.implementors.ApiRequester
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.json.JSONArray
 import org.json.JSONException
-import org.json.JSONObject
 import java.lang.RuntimeException
 
-class YugiohCardLookup : ApiCommand() {
+class YugiohCardLookup : GuildMessageReceivedCommand("YGO Card Lookup"),
+    Requestable by ApiRequester() {
 
     private val url = "https://db.ygoprodeck.com/api/v5/cardinfo.php?fname="
-    override fun syntaxDescription(): String =
-        "ygo {card-name} -- When punctuation is involved, exact formatting must be used around it"
 
     override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
         return prefixPredicate(event.message.contentRaw, "ygo")

@@ -1,19 +1,18 @@
-package com.portalsoup.mrleaguy.commands.usercommands
+package com.portalsoup.mrbutlertron.commands.messagereceived.usercommands
 
-import com.portalsoup.mrleaguy.commands.ApiCommand
+import com.portalsoup.mrbutlertron.commands.messagereceived.GuildMessageReceivedCommand
+import com.portalsoup.mrbutlertron.core.command.delegates.implementors.ApiRequester
+import com.portalsoup.mrbutlertron.core.command.delegates.types.Requestable
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.json.JSONObject
 import java.lang.RuntimeException
 
-class MagicCardLookup : ApiCommand() {
+class MagicCardLookup : GuildMessageReceivedCommand("MTG Card Lookup"), Requestable by ApiRequester() {
 
     val url = "https://api.scryfall.com/cards/named?fuzzy="
 
     val noResultsText = "Didn't find the card.  The search could have been too broad to confidently" +
             " pick the correct match, or didn't match any cards at all."
-
-    override fun syntaxDescription(): String =
-        "mtg {card-name}"
 
     override fun runPredicate(event: GuildMessageReceivedEvent): Boolean {
         return prefixPredicate(event.message.contentRaw, "mtg")
@@ -33,7 +32,7 @@ class MagicCardLookup : ApiCommand() {
             println("cardUrl: ${cardUrl}")
 
             event.channel.sendMessage(cardUrl).queue()
-        } catch (e: NoResultsFoundException) {
+        } catch (e: ApiRequester.NoResultsFoundException) {
             event.channel.sendMessage(noResultsText).queue()
         } catch (e2: RuntimeException) {
             event.channel.addReactionById(event.message.id, "❌")

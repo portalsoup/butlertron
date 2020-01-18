@@ -1,15 +1,16 @@
-package com.portalsoup.mrleaguy.commands
+package com.portalsoup.mrbutlertron.core.command.delegates.implementors
 
+import com.portalsoup.mrbutlertron.core.command.delegates.types.Requestable
 import okhttp3.*
 import java.io.IOException
 import java.lang.RuntimeException
 
 
-abstract class ApiCommand : AbstractCommand() {
+class ApiRequester : Requestable {
 
     private val apiClient = OkHttpClient()
 
-    fun makeRequest(url: String): String {
+    override fun makeRequest(url: String): String {
         try {
             val request = Request.Builder()
                 .url(url)
@@ -49,6 +50,6 @@ abstract class ApiCommand : AbstractCommand() {
             throw e
         }
     }
-    protected class NoResultsFoundException: RuntimeException()
+    class NoResultsFoundException: RuntimeException()
 
 }
