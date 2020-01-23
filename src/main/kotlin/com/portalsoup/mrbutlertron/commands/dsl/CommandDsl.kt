@@ -4,18 +4,24 @@ import net.dv8tion.jda.api.events.Event
 
 @DslMarker annotation class CommandDsl
 
+/*
+ * Command
+ */
 fun <E : Event> command(lambda: CommandBuilder<E>.() -> Unit) = CommandBuilder<E>().apply(lambda).build()
 
 data class Command<E : Event>(
     val job: Job<E>,
-    val preconditions: List<Precondition<E>>
+    val preconditions: List<(E) -> Boolean>,
+    val description: String,
+    val name: String
 )
 
 @CommandDsl
 class CommandBuilder<E : Event> {
-    private var job: Job<E> =
-        Job { Unit }
-    private var preconditions = mutableListOf<Precondition<E>>()
+    private var job: Job<E> = Job { Unit }
+    private var preconditions = mutableListOf<(E) -> Boolean>()
+    private var description = ""
+    private var name = ""
 
     fun job(lambda: JobBuilder<E>.() -> Unit) {
         job = JobBuilder<E>().apply(lambda).build()
@@ -27,35 +33,34 @@ class CommandBuilder<E : Event> {
         )
     }
 
-    fun build() = Command(job, preconditions)
+    fun description(lambda: () -> String) {
+        description = lambda()
+    }
+
+    fun name(lambda: () -> String) {
+        name = lambda()
+    }
+
+    fun build() = Command(job, preconditions, description, name)
 }
 
-data class Precondition<in E : Event>(val predicate: (E) -> Boolean)
-
+/*
+ * Precondition
+ */
 @CommandDsl
 class PreconditionListBuilder<E : Event> {
-    private val preconditions = mutableListOf<Precondition<E>>()
+    private val preconditions = mutableListOf<(E) -> Boolean>()
 
-    fun precondition(lambda: PreconditionBuilder<E>.() -> Unit) {
-        preconditions.add(
-            PreconditionBuilder<E>().apply(lambda).build()
-        )
+    fun predicate(lambda: (E) -> Boolean) {
+        preconditions.add(lambda)
     }
 
     fun build() = preconditions
 }
 
-@CommandDsl
-class PreconditionBuilder<E : Event> {
-    private var predicate: (E) -> Boolean = { _ -> false }
-
-    fun predicate(lambda: (E) -> Boolean) {
-        this.predicate = lambda
-    }
-
-    fun build() = Precondition(predicate)
-}
-
+/*
+ * Job
+ */
 data class Job<in E : Event>(val run: (E) -> Unit)
 
 @CommandDsl

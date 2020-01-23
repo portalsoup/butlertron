@@ -1,20 +1,21 @@
 package com.portalsoup.mrbutlertron.commands.dsl.commands
 
-import com.portalsoup.mrbutlertron.commands.dsl.MessageReceivedDslCommand
+import com.portalsoup.mrbutlertron.commands.dsl.GuildMessageReceivedCommand
 import com.portalsoup.mrbutlertron.commands.dsl.command
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 
-class ButlerQuotes : MessageReceivedDslCommand<GuildMessageReceivedEvent>(
+class ButlerQuotes : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
 
     command {
+
+        description { "Say my name" }
+
         preconditions {
-            precondition {
-                predicate { event ->
-                    event.message.contentRaw
-                        .trim()
-                        .toLowerCase()
-                        .matches(Regex("mr\\s*butlertron"))
-                }
+            predicate { event ->
+                event.message.contentRaw
+                    .trim()
+                    .toLowerCase()
+                    .matches(Regex("mr\\.*\\s*butlertron"))
             }
         }
 
