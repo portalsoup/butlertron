@@ -5,16 +5,15 @@ import com.portalsoup.mrbutlertron.commands.messagereceived.usercommands.*
 import com.portalsoup.mrbutlertron.core.command.AbstractCommand
 import net.dv8tion.jda.api.AccountType
 import net.dv8tion.jda.api.JDABuilder
+import net.dv8tion.jda.api.events.Event
 
 class MrButlertron(private val token: String) {
 
-    val commands: List<AbstractCommand<*>> = listOf(
+    val commands: List<AbstractCommand<out Event>> = listOf(
         MagicCardLookup(),
         YugiohCardLookup(),
         CommandList(),
-        ButlertronQuotes(),
-        GreetNewMembers(),
-        ChuckNorrisJoke()
+        GreetNewMembers()
     )
 
     fun run() {
@@ -25,4 +24,5 @@ class MrButlertron(private val token: String) {
 
         jdaBuilder.build().awaitReady()
     }
+
 }
