@@ -12,7 +12,7 @@ class GravysMotorway : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
                 it.message.contentRaw
                     .trim()
                     .toLowerCase()
-                    .equals("i've got a meal on the motorway to the floater-way. you say?")
+                    .contains("i've got a meal on the motorway to the floater-way. you say?")
             }
         }
 
