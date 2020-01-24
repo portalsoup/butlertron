@@ -1,7 +1,8 @@
-package com.portalsoup.mrbutlertron.commands.dsl.commands
+package com.portalsoup.mrbutlertron.commands
 
-import com.portalsoup.mrbutlertron.commands.dsl.GuildJoinCommand
-import com.portalsoup.mrbutlertron.commands.dsl.command
+
+import com.portalsoup.discordbot.core.command.GuildJoinCommand
+import com.portalsoup.discordbot.core.command.command
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent
 

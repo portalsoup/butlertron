@@ -1,5 +1,7 @@
 package com.portalsoup.mrbutlertron
 
+import com.portalsoup.discordbot.DiscordBot
+
 fun main(args: Array<String>) {
     println("Loading ENV")
     val token = System.getenv("BOT_TOKEN")
@@ -7,6 +9,6 @@ fun main(args: Array<String>) {
     println("token: ${token}")
 
     println("Starting bot")
-    val bot = MrButlertron(token)
+    val bot = DiscordBot(token)
     bot.run()
 }

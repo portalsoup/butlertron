@@ -1,7 +1,7 @@
-package com.portalsoup.mrbutlertron.commands.dsl.commands
+package com.portalsoup.mrbutlertron.commands
 
-import com.portalsoup.mrbutlertron.commands.dsl.GuildMessageReceivedCommand
-import com.portalsoup.mrbutlertron.commands.dsl.command
+import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
+import com.portalsoup.discordbot.core.command.command
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.reflections.Reflections
 

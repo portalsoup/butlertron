@@ -1,8 +1,8 @@
-package com.portalsoup.mrbutlertron.commands.dsl.commands
+package com.portalsoup.mrbutlertron.commands
 
-import com.portalsoup.mrbutlertron.commands.dsl.GuildMessageReceivedCommand
-import com.portalsoup.mrbutlertron.commands.dsl.command
-import com.portalsoup.mrbutlertron.core.extensions.Api
+import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
+import com.portalsoup.discordbot.core.command.command
+import com.portalsoup.discordbot.core.extensions.Api
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.json.JSONArray
 import org.json.JSONException
