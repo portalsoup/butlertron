@@ -11,7 +11,6 @@ class PersonalPingPong : PrivateMessageReceivedCommand<PrivateMessageReceivedEve
         name { "`ping`-pong" }
         preconditions {
             predicate {
-                println("yes?")
                 it.message.contentRaw
                     .trim()
                     .toLowerCase()
@@ -21,8 +20,6 @@ class PersonalPingPong : PrivateMessageReceivedCommand<PrivateMessageReceivedEve
 
         job {
             run { event ->
-                println("yes")
-                println(event.message.author.toString())
                 event.message.author.openPrivateChannel().queue { channel ->
                     channel.sendMessage("pong").queue()
                 }

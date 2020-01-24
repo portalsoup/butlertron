@@ -27,7 +27,6 @@ class YugiohCardLookup : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
 
         job {
             run {
-                println("Raw message=${it.message.contentRaw}")
                 val url = "https://db.ygoprodeck.com/api/v5/cardinfo.php?fname="
 
                 try {
@@ -39,15 +38,10 @@ class YugiohCardLookup : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
                     val response = Api.makeRequest(url + term)
                     val imageUrl = try {
                         val outerArray = JSONArray(response)
-                        println("Is an array")
                         val firstMatch = outerArray.getJSONObject(0)
-                        println("first match=$firstMatch")
                         val imagesArray = firstMatch.getJSONArray("card_images")
-                        println("images array size ${imagesArray.length()}")
                         val firstImage = imagesArray.getJSONObject(0)
-                        println("first image found")
                         val imageUrl = firstImage.getString("image_url")
-                        println("imageUrl=${imageUrl}")
                         imageUrl
                     } catch (e: JSONException) {
                         "No match"

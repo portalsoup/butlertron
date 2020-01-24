@@ -39,13 +39,11 @@ class MagicCardLookup : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
                     val json = JSONObject(Api.makeRequest(url + term))
                     val extractedJson: String = when {
                         json.has("image_uris") -> {
-                            println("has image_uris")
                             json
                                 .getJSONObject("image_uris")
                                 .getString("normal").toString()
                         }
                         json.has("details") -> {
-                            println("has details")
                             json
                                 .getString("details")
                         }
