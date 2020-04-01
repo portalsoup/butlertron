@@ -1,12 +1,13 @@
-package com.portalsoup.mrbutlertron.commands
+package com.portalsoup.mrbutlertron.commands.shinchan
 
 import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
 import com.portalsoup.discordbot.core.command.command
+import com.portalsoup.discordbot.core.command.sendMessage
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 
 class GravysMotorway : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
 
-    command {
+    sendMessage {
         preconditions {
             predicate {
                 it.message.contentRaw
@@ -17,11 +18,7 @@ class GravysMotorway : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
         }
 
         job {
-            run {
-                it.channel
-                    .sendMessage("Don't rush the flush, Daddio! Listen to the ass! Pass the gas! Listen to the ass! Pass the gas!")
-                    .queue()
-            }
+            reply { "Don't rush the flush, Daddio! Listen to the ass! Pass the gas! Listen to the ass! Pass the gas!" }
         }
     }
 )

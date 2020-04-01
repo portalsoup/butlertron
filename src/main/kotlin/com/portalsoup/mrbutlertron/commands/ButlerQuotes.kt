@@ -2,26 +2,23 @@ package com.portalsoup.mrbutlertron.commands
 
 import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
 import com.portalsoup.discordbot.core.command.command
+import com.portalsoup.discordbot.core.command.sendMessage
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 
 class ButlerQuotes : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
 
-    command {
-
-        description { "Say my name" }
-
+    sendMessage {
         preconditions {
-            predicate { event ->
-                event.message.contentRaw
-                    .trim()
-                    .toLowerCase()
-                    .matches(Regex("mr\\.*\\s*butlertron"))
+            message {
+                matches {
+                    "mr\\.*\\s*butlertron"
+                }
             }
         }
 
         job {
-            run { event ->
-                val quote = listOf(
+            reply {
+                listOf(
                     "I'm sorry, Wesley, you have ADD.",
                     "Perhaps you could get Clone High a corporate sponsor. Those Pumas were rather fresh.",
                     "Oh Wesley. At least I'm not a pompous china dog whose evil plans suck the devils ASS. That's right WESLEY. Find yourself a new best FRIEND.",
@@ -35,8 +32,6 @@ class ButlerQuotes : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
                     "Weeeesleeey",
                     "Maybe some overpriced knick-knacks will add a touch of class."
                 ).random()
-
-                event.channel.sendMessage(quote).queue()
             }
         }
     }

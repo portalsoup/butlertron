@@ -24,7 +24,7 @@ class MagicCardLookup : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
         }
 
         job {
-            run {
+            addRunner {
                 val url = "https://api.scryfall.com/cards/named?fuzzy="
 
                 val noResultsText = "Didn't find the card.  The search could have been too broad to confidently" +

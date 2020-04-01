@@ -23,7 +23,7 @@ class NorrisJokes : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
         }
 
         job {
-            run {
+            addRunner {
                 val jokeUrl = "http://api.icndb.com/jokes/random?exclude=[explicit]"
                 val response = JSONObject(Api.makeRequest(jokeUrl))
                 val joke: String = when {

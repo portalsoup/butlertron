@@ -1,12 +1,13 @@
-package com.portalsoup.mrbutlertron.commands
+package com.portalsoup.mrbutlertron.commands.shinchan
 
 import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
 import com.portalsoup.discordbot.core.command.command
+import com.portalsoup.discordbot.core.command.sendMessage
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 
 class AssDancer : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
 
-    command {
+    sendMessage {
         preconditions {
             predicate {
                 it.message.contentRaw
@@ -17,11 +18,7 @@ class AssDancer : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
         }
 
         job {
-            run {
-                it.channel
-                    .sendMessage("A traditional Ass-Dance will cost you *TWO* boxes of Chocobees.")
-                    .queue()
-            }
+            reply { "A traditional Ass-Dance will cost you *TWO* boxes of Chocobees." }
         }
     }
 )

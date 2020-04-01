@@ -1,12 +1,13 @@
-package com.portalsoup.mrbutlertron.commands
+package com.portalsoup.mrbutlertron.commands.shinchan
 
 import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
 import com.portalsoup.discordbot.core.command.command
+import com.portalsoup.discordbot.core.command.sendMessage
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 
 class OneBoxCheek : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
 
-    command {
+    sendMessage {
         preconditions {
             predicate {
                 it.message.contentRaw
@@ -17,12 +18,7 @@ class OneBoxCheek : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
         }
 
         job {
-            run {
-                it.channel
-                    .sendMessage("One *CHEEK!*")
-                    .queue()
-            }
+            reply { "One *CHEEK!*" }
         }
     }
-)
 )

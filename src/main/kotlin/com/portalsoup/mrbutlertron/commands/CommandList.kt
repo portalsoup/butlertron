@@ -2,27 +2,24 @@ package com.portalsoup.mrbutlertron.commands
 
 import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
 import com.portalsoup.discordbot.core.command.command
+import com.portalsoup.discordbot.core.command.sendMessage
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.reflections.Reflections
 
 class CommandList : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
-
-    command {
+    sendMessage {
         description {
             "List all commands."
         }
 
         preconditions {
-            predicate {
-                it.message.contentRaw
-                    .trim()
-                    .toLowerCase()
-                    .matches(Regex("!(mr(\\.)?(\\s+)?)?butler(tron)?\\s+list"))
+            message {
+                matches { "!(mr(\\.)?(\\s+)?)?butler(tron)?\\s+list" }
             }
         }
 
         job {
-            run { event ->
+            reply {
                 val reflections = Reflections()
                 val dslCommands: List<GuildMessageReceivedCommand<*>> =
                     reflections.getSubTypesOf(GuildMessageReceivedCommand::class.java)
@@ -40,7 +37,7 @@ class CommandList : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
                     "$name\n${description}"
                 }.forEach { stringBuilder.append(it).append("\n\n") }
 
-                event.channel.sendMessage(stringBuilder.toString()).queue()
+                stringBuilder.toString()
             }
         }
     }

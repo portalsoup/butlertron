@@ -26,7 +26,7 @@ class YugiohCardLookup : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
         }
 
         job {
-            run {
+            addRunner {
                 val url = "https://db.ygoprodeck.com/api/v5/cardinfo.php?fname="
 
                 try {

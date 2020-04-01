@@ -19,7 +19,7 @@ class PersonalPingPong : PrivateMessageReceivedCommand<PrivateMessageReceivedEve
         }
 
         job {
-            run { event ->
+            addRunner { event ->
                 event.message.author.openPrivateChannel().queue { channel ->
                     channel.sendMessage("pong").queue()
                 }
