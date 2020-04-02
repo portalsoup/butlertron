@@ -1,29 +1,31 @@
 package com.portalsoup.mrbutlertron.commands
 
+
 import com.portalsoup.discordbot.core.command.PrivateMessageReceivedCommand
-import com.portalsoup.discordbot.core.command.command
+import com.portalsoup.discordbot.core.command.type.sendDM
+import com.portalsoup.discordbot.core.command.type.sendMessage
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent
 
 class PersonalPingPong : PrivateMessageReceivedCommand<PrivateMessageReceivedEvent>(
 
-    command {
+    sendDM {
         description { "ping me in DM" }
         name { "`ping`-pong" }
+
         preconditions {
-            predicate {
-                it.message.contentRaw
-                    .trim()
-                    .toLowerCase()
-                    .equals("ping")
+            message {
+                equalsIgnoreCase {
+                    "ping"
+                }
             }
         }
 
+
         job {
-            addRunner { event ->
-                event.message.author.openPrivateChannel().queue { channel ->
-                    channel.sendMessage("pong").queue()
-                }
-            }
+
+            reply { "Pong 1!" }
+
+            reply { "Pong 2!" }
         }
     }
 )

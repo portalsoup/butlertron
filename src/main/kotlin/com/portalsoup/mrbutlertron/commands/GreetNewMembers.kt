@@ -2,35 +2,27 @@ package com.portalsoup.mrbutlertron.commands
 
 
 import com.portalsoup.discordbot.core.command.GuildJoinCommand
-import com.portalsoup.discordbot.core.command.command
-import com.portalsoup.discordbot.core.command.sendMessage
-import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.events.guild.GuildJoinEvent
+import com.portalsoup.discordbot.core.command.type.onJoin
+import com.portalsoup.discordbot.core.command.type.sendDM
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
+import java.lang.RuntimeException
 
-class GreetNewMembers : GuildJoinCommand<GuildJoinEvent>(
+class GreetNewMembers : GuildJoinCommand<GuildMemberJoinEvent>(
 
-    command {
+    onJoin {
 
         name { "Greetings" }
         description { "I greet new members automatically" }
 
         preconditions {
-            predicate { true }
+            isABot { false }
         }
 
         job {
             addRunner {
-                val members = it.guild.members
-                members.sortWith<Member>(Comparator { o1, o2 -> o1.timeJoined.compareTo(o2.timeJoined) }) // TODO this may be comparing backwards
-
-                val memberName = members.last().effectiveName
-
-                val channel = it.guild.getTextChannelsByName("bot-testing-ground", false).firstOrNull() ?: return@addRunner
-
-                channel.sendMessage("Hello, ${memberName}!").queue()
+                val channel = it.guild.defaultChannel ?: throw RuntimeException("No default channel found for ${it.guild.name}")
+                    channel.sendMessage("Hello, ${it.member.effectiveName}!").queue()
             }
-
         }
-
     }
 )

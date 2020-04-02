@@ -1,8 +1,7 @@
 package com.portalsoup.mrbutlertron.commands.shinchan
 
 import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
-import com.portalsoup.discordbot.core.command.command
-import com.portalsoup.discordbot.core.command.sendMessage
+import com.portalsoup.discordbot.core.command.type.sendMessage
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 
 class OneBoxCheek : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
