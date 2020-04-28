@@ -1,9 +1,7 @@
 package com.portalsoup.mrbutlertron.commands
 
-
 import com.portalsoup.discordbot.core.command.GuildJoinCommand
 import com.portalsoup.discordbot.core.command.type.onJoin
-import com.portalsoup.discordbot.core.command.type.sendDM
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import java.lang.RuntimeException
 

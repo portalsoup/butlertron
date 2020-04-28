@@ -21,10 +21,13 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.hibernate:hibernate-gradle-plugin:5.4.1.Final")
     implementation("com.h2database:h2:1.4.198")
+    implementation("net.dv8tion:JDA:4.0.0_76")
+    implementation("org.json:json:20190722")
 
-    implementation("com.portalsoup:discordbot") {
-        version {
-            branch = "master"
-        }
-    }
+    compile("com.h2database:h2:1.4.200")
+
+    compile("org.jetbrains.exposed", "exposed-core", "0.23.1")
+    compile("org.jetbrains.exposed", "exposed-dao", "0.23.1")
+    compile("org.jetbrains.exposed", "exposed-jdbc", "0.23.1")
+    compile("com.zaxxer:HikariCP:2.7.8")
 }
