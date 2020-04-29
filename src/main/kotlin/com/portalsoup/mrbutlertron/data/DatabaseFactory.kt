@@ -10,9 +10,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
 
-    fun init() {
-        // liquibase here later then remove transaction block to create tables
+    val dataSource = "jdbc:h2:./database/app"
 
+    fun init() {
         Database.connect(hikari())
         transaction {
             create(RememberMe)
@@ -24,10 +24,11 @@ object DatabaseFactory {
     private fun hikari(): HikariDataSource {
         val config = HikariConfig()
         config.driverClassName = "org.h2.Driver"
-        config.jdbcUrl = "jdbc:h2:./database/app"
+        config.jdbcUrl = dataSource
         config.maximumPoolSize = 3
         config.isAutoCommit = false
         config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+        config.username = "bot"
         config.validate()
         return HikariDataSource(config)
     }
