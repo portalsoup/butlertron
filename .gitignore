@@ -1,4 +1,7 @@
 /build/
 /.gradle/
-.env
+.bot_token
 /.idea/
+/database
+gradle.properties
+**/*.db

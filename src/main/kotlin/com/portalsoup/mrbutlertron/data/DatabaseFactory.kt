@@ -40,14 +40,14 @@ object DatabaseFactory {
 
     fun migrateFlyway(flyway: Flyway, runAgain: Boolean = true) {
         try {
-            flyway.validate()
             flyway.migrate()
         } catch (e: FlywayException) {
             flyway.repair()
+            flyway.validate()
             if (runAgain) {
                 migrateFlyway(flyway, false)
             } else {
-                throw e
+                throw RuntimeException("Failed to migrate or repair flyway", e)
             }
         }
     }

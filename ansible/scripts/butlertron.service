@@ -1,0 +1,11 @@
+[Unit]
+Description=Launch Butlertron
+
+[Service]
+ExecStart=/srv/butlertron/init.sh
+RemainAfterExit=no
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

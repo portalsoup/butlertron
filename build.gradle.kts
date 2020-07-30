@@ -1,7 +1,10 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     application
     kotlin("jvm") version "1.3.70"
     id("org.flywaydb.flyway") version "6.4.0"
+    id("com.github.johnrengelman.shadow") version "5.1.0"
 }
 
 project.group = "com.portalsoup"
@@ -9,6 +12,8 @@ project.version = "1.0-SNAPSHOT"
 
 application {
     mainClassName = "com.portalsoup.mrbutlertron.MainKt"
+    applicationDefaultJvmArgs = listOf("-Dbutlertron.token=${project.property("butlertron.token")}")
+
 }
 
 repositories {
@@ -36,13 +41,28 @@ dependencies {
     compile("org.flywaydb:flyway-core:6.4.0")
 }
 
-// Don't run app if migrations aren't current and successful.  Run flywayRepair or flywayMigrate
-tasks.getByName("run") {
-    dependsOn("flywayValidate")
-}
-
 flyway {
     url = "jdbc:h2:./database/app"
     user = "bot"
     password = ""
+}
+
+// jar stuff
+
+tasks {
+    named<ShadowJar>("shadowJar") {
+        archiveBaseName.set("shadow")
+        mergeServiceFiles()
+        manifest {
+            attributes(mapOf(
+                "Main-Class" to application.mainClassName
+            ))
+        }
+    }
+}
+
+tasks {
+    build {
+        dependsOn(shadowJar)
+    }
 }

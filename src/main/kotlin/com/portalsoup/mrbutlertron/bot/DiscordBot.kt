@@ -5,8 +5,9 @@ import net.dv8tion.jda.api.JDABuilder
 
 object DiscordBot {
     val global by lazy {
-        val token = System.getenv("BOT_TOKEN")
-        token.replace("\"","")
+        val token = System.getProperty("butlertron.token")
+//        token.replace("\"","")
+        println("token: ${token}")
 
         JDABuilder(AccountType.BOT)
             .addEventListeners(EventListener(this))
