@@ -4,6 +4,7 @@ import com.portalsoup.discordbot.core.command.GuildJoinCommand
 import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
 import com.portalsoup.discordbot.core.command.Job
 import com.portalsoup.discordbot.core.command.PrivateMessageReceivedCommand
+import com.portalsoup.mrbutlertron.core.getLogger
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
@@ -13,16 +14,22 @@ import org.reflections.Reflections
 @Suppress("UNCHECKED_CAST")
 class EventListener(private val bot: DiscordBot) : ListenerAdapter() {
 
+    private val log = getLogger(javaClass)
+
+    // TODO This needs to be replaced with a database table
     val history: Array<String> = arrayOf("","","","","","","","","","")
     var currentIndex = 0
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        if (history.contains(event.message.id)) {
-            println("Found a duplicate!  ${event.message.id}")
+        log.info("Received a message from a guild server.")
+        val messageId = event.message.id
+
+        if (history.contains(messageId)) {
+            log.debug("Encountered an event with a duplicate message ID [$messageId]")
             return
         } else {
-            println("Adding ${event.message.id} to index=${currentIndex}")
-            history[currentIndex] = event.message.id
+            log.debug("Adding $messageId to index=$currentIndex")
+            history[currentIndex] = messageId
             incrementHistoryCounter()
         }
 
@@ -54,6 +61,7 @@ class EventListener(private val bot: DiscordBot) : ListenerAdapter() {
     }
 
     override fun onPrivateMessageReceived(event: PrivateMessageReceivedEvent) {
+        log.info("Received a private message from a user.")
         // dsl commands
         val reflections = Reflections()
 
@@ -74,6 +82,7 @@ class EventListener(private val bot: DiscordBot) : ListenerAdapter() {
     }
 
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
+        log.info("Detected that a new user has joined a guild server.")
         // dsl commands
         val reflections = Reflections()
 

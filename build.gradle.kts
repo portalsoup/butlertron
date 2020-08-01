@@ -29,6 +29,9 @@ dependencies {
     implementation("com.h2database:h2:1.4.198")
     implementation("net.dv8tion:JDA:4.0.0_76")
     implementation("org.json:json:20190722")
+    implementation("org.slf4j:slf4j-api:1.7.30")
+    implementation("ch.qos.logback:logback-core:1.2.3")
+    implementation("ch.qos.logback:logback-classic:1.2.3")
 
     compile("com.h2database:h2:1.4.200")
 

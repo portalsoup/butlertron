@@ -1,10 +1,13 @@
 package com.portalsoup.discordbot.core.extensions
 
+import com.portalsoup.mrbutlertron.core.getLogger
 import okhttp3.*
 import java.io.IOException
 import java.lang.RuntimeException
 
 object Api {
+
+    private val log = getLogger(javaClass)
 
     fun makeRequest(url: String): String {
         val apiClient = OkHttpClient()
@@ -33,13 +36,13 @@ object Api {
             }
 
             if (response.isEmpty() || response == "null") {
-                println("Api failed: response=${response}")
+                log.info("Api failed: response=${response}")
                 throw NoResultsFoundException()
             }
 
             return response
         } catch (e: RuntimeException) {
-            println("FAILED!" + e.message)
+            log.error("An API request has failed ", e.message)
             e.printStackTrace()
             throw e
         }
