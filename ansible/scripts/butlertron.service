@@ -2,6 +2,7 @@
 Description=Launch Butlertron
 
 [Service]
+Type=simple
 ExecStart=/srv/butlertron/init.sh
 RemainAfterExit=no
 Restart=on-failure

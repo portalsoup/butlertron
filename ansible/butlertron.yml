@@ -32,12 +32,16 @@
         src: ../build/libs/shadow-1.0-SNAPSHOT-all.jar
         dest: /srv/butlertron/butlertron.jar
         mode: '+x'
+      notify:
+        - restart_butlertron
 
     - name: Copy init script
       template:
         src: ./scripts/init.j2
         dest: /srv/butlertron/init.sh
         mode: '+x'
+      notify:
+        - restart_butlertron
 
     - name: Copy systemd service
       copy:
