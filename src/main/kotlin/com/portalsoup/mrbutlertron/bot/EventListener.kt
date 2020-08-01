@@ -1,5 +1,6 @@
 package com.portalsoup.mrbutlertron.bot
 
+import com.portalsoup.mrbutlertron.core.ReflectionUtils.Companion.reflections
 import com.portalsoup.discordbot.core.command.GuildJoinCommand
 import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
 import com.portalsoup.discordbot.core.command.Job
@@ -10,7 +11,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import org.reflections.Reflections
+
 @Suppress("UNCHECKED_CAST")
 class EventListener(private val bot: DiscordBot) : ListenerAdapter() {
 
@@ -41,11 +42,9 @@ class EventListener(private val bot: DiscordBot) : ListenerAdapter() {
             return
         }
 
-        // dsl commands
-        val reflections = Reflections()
-
+        log.info("About to do reflection")
         val dslCommands: List<GuildMessageReceivedCommand<*>> =
-            reflections.getSubTypesOf(GuildMessageReceivedCommand::class.java)
+            reflections().getSubTypesOf(GuildMessageReceivedCommand::class.java)
                 .map { it.getConstructor().newInstance() }
 
         dslCommands.filter {
@@ -62,11 +61,10 @@ class EventListener(private val bot: DiscordBot) : ListenerAdapter() {
 
     override fun onPrivateMessageReceived(event: PrivateMessageReceivedEvent) {
         log.info("Received a private message from a user.")
-        // dsl commands
-        val reflections = Reflections()
 
+        log.info("About to do reflection")
         val dslCommands: List<PrivateMessageReceivedCommand<*>> =
-            reflections.getSubTypesOf(PrivateMessageReceivedCommand::class.java)
+            reflections().getSubTypesOf(PrivateMessageReceivedCommand::class.java)
                 .map { it.getConstructor().newInstance() }
 
         dslCommands.filter {
@@ -83,11 +81,9 @@ class EventListener(private val bot: DiscordBot) : ListenerAdapter() {
 
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
         log.info("Detected that a new user has joined a guild server.")
-        // dsl commands
-        val reflections = Reflections()
 
         val dslCommands: List<GuildJoinCommand<*>> =
-            reflections.getSubTypesOf(GuildJoinCommand::class.java)
+            reflections().getSubTypesOf(GuildJoinCommand::class.java)
                 .map { it.getConstructor().newInstance() }
 
         dslCommands.filter {

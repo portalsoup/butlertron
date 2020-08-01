@@ -6,6 +6,7 @@ import com.portalsoup.discordbot.core.command.JobBuilder
 import com.portalsoup.discordbot.core.command.PreconditionListBuilder
 import com.portalsoup.discordbot.core.command.preconditions.PrivateMessageAuthorPreconditions
 import com.portalsoup.discordbot.core.command.preconditions.PrivateMessagePreconditions
+import com.portalsoup.mrbutlertron.core.getLogger
 import net.dv8tion.jda.api.events.message.priv.GenericPrivateMessageEvent
 
 /**
@@ -30,9 +31,13 @@ class PrivateMessageReceivedCommandBuilder<E : GenericPrivateMessageEvent> : Abs
 
 @CommandDsl
 open class PrivateMessageJobBuilder<E : GenericPrivateMessageEvent> : JobBuilder<E>() {
+    private val log = getLogger(javaClass)
     fun reply(lambda: () -> String) {
         addRunner { event ->
-            event.channel.sendMessage(lambda()).queue()
+            val message = lambda()
+            log.info("Sending a message to a private user. $message ")
+            event.channel.sendMessage(message).queue()
+
         }
     }
 }
