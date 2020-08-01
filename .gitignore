@@ -6,3 +6,9 @@
 gradle.properties
 **/*.db
 /**/vault-password
+
+/terraform/.terraform/
+**/*tfstate*
+
+/ansible/inventory
+/ansible/*.cfg
