@@ -1,31 +1,14 @@
 package com.portalsoup.mrbutlertron
 
 import com.portalsoup.mrbutlertron.bot.DiscordBot
-import com.portalsoup.mrbutlertron.core.getLogger
-import com.portalsoup.mrbutlertron.data.DatabaseFactory
-import org.flywaydb.core.Flyway
-import org.flywaydb.core.api.FlywayException
-import org.slf4j.LoggerFactory
+import java.lang.RuntimeException
 
 fun main(args: Array<String>) {
-    val butlertron = MrButlertron()
+    val name = System.getProperty("discord.bot.name") ?: throw RuntimeException("Missing java property [discord.bot.name]")
+    val token = System.getProperty("discord.bot.token") ?: throw RuntimeException("Missing java property [discord.bot.token]")
 
-    butlertron.apply {
+    DiscordBot(name, token).apply {
         init()
         run()
-    }
-}
-
-class MrButlertron {
-    private val log = getLogger(javaClass)
-
-    fun init() {
-        log.info("Initializing Mr. Butlertron...")
-        DatabaseFactory.init()
-    }
-
-    fun run() {
-        DiscordBot.global
-        log.info("Mr. Butlertron ready for service!")
     }
 }

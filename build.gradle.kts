@@ -12,8 +12,10 @@ project.version = "1.0-SNAPSHOT"
 
 application {
     mainClassName = "com.portalsoup.mrbutlertron.MainKt"
-    applicationDefaultJvmArgs = listOf("-Dbutlertron.token=${project.property("butlertron.token")}")
-
+    applicationDefaultJvmArgs = listOf(
+        "-Ddiscord.bot.token=${project.property("discord.bot.token")}",
+        "-Ddiscord.bot.name=${project.property("discord.bot.name")}"
+    )
 }
 
 repositories {
@@ -67,5 +69,101 @@ tasks {
 tasks {
     build {
         dependsOn(shadowJar)
+    }
+}
+
+tasks.create("deploy") {
+    dependsOn("shadowJar", "terraform-apply", "ansible")
+}
+
+tasks.create("terraform-init") {
+    onlyIf {
+        println("Checking for the presence of terraform/data.tf")
+        File("$rootDir/terraform/data.tf").exists()
+    }
+
+    doLast {
+        project.exec {
+            workingDir("$rootDir/terraform")
+            commandLine("terraform", "init")
+        }
+    }
+}
+
+/*
+ * By depending on this task, you require a user to manually validate the calculated diff.  If rejected this task
+ * this task fails prevent downstream tasks from performing any changes
+ */
+tasks.create("terraform-plan") {
+    onlyIf {
+        println("Checking for the presence of terraform/data.tf")
+        File("$rootDir/terraform/data.tf").exists()
+    }
+
+    // configure stdin for prompts
+    val run by tasks.getting(JavaExec::class) {
+        standardInput = System.`in`
+    }
+
+    doLast {
+        val planResult = project.exec {
+            workingDir("$rootDir/terraform")
+            commandLine("terraform", "plan")
+        }
+        when (planResult.exitValue) {
+            0 -> {
+                println("Accept this plan? (Type 'yes' to accept)")
+                val input = readLine()
+                input
+                    ?.takeIf { it == "yes" }
+                    ?: throw GradleException("Terraform planned changes were rejected")
+            }
+            else -> throw GradleException("Unexpected failure $planResult")
+        }
+    }
+}
+
+tasks.create("terraform-apply") {
+    dependsOn("terraform-plan")
+
+    onlyIf {
+        println("Checking for the presence of terraform/data.tf")
+        File("$rootDir/terraform/data.tf").exists()
+    }
+
+    doLast {
+        project.exec {
+            workingDir("$rootDir/terraform")
+            commandLine("terraform", "apply")
+        }
+    }
+}
+
+tasks.create("ansible") {
+    mustRunAfter("terraform-plan", "terraform-apply", "shadowJar")
+    onlyIf {
+        println("Checking for the presence of ansible/vars.yml")
+        File("$rootDir/ansible/vars.yml").exists()
+    }
+
+    doLast {
+        // optional arg, required if the bot token contained in $vars.yml is vault encrypted
+        val vaultFileArg = project.properties["vaultPassword"]
+            ?.let { it as String }
+            ?.let { File(it) }
+            ?.takeIf { it.exists() }
+            ?.let { it.absolutePath }
+            ?.let { listOf("--vault-password-file", it) }
+            ?: listOf()
+
+        val sshUser = project.properties["sshUser"]
+            ?.let { it as String }
+            ?.takeIf { it.isNotEmpty() }
+            ?: "root"
+
+        project.exec {
+            workingDir("$rootDir/ansible")
+            commandLine("ansible-playbook", "-u", sshUser, "butlertron.yml", *(vaultFileArg.toTypedArray()))
+        }
     }
 }

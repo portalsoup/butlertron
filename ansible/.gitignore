@@ -1,0 +1,4 @@
+vars.yml
+vault-password
+/ansible/inventory
+inventory
