@@ -24,7 +24,7 @@ required secrets files.
 Perform a deployment.  This is the entrypoint and will build and package the full project.  Create/update infrastructure
 and finally provision that infrastructure.
 
-## Optional arguments:
+### Optional arguments:
 * `PvaultPasswordFile=path/to/file/containing/password`
 A file containing the ansible vault password with no padding
 * `-PsshUser=username`
