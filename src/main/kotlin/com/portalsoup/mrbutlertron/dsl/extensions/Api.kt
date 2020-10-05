@@ -9,12 +9,13 @@ object Api {
 
     private val log = getLogger(javaClass)
 
-    fun makeRequest(url: String): String {
+    fun makeRequest(url: String, headers: Map<String, String> = mapOf()): String {
         val apiClient = OkHttpClient()
 
         try {
             val request = Request.Builder()
                 .url(url)
+                .headers(Headers.of(headers))
                 .build()
 
             var done = false

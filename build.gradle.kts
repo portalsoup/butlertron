@@ -14,7 +14,8 @@ application {
     mainClassName = "com.portalsoup.mrbutlertron.MainKt"
     applicationDefaultJvmArgs = listOf(
         "-Ddiscord.bot.token=${project.property("discord.bot.token")}",
-        "-Ddiscord.bot.name=${project.property("discord.bot.name")}"
+        "-Ddiscord.bot.name=${project.property("discord.bot.name")}",
+        "-Dnookipedia.token=${project.property("nookipedia.token")}"
     )
 }
 
