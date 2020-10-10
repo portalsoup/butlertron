@@ -104,7 +104,7 @@ tasks.create("terraform-init") {
 
 /*
  * By depending on this task, you require a user to manually validate the calculated diff.  If rejected this task
- * this task fails prevent downstream tasks from performing any changes
+ * prevents downstream tasks from performing any changes
  */
 tasks.create("terraform-plan") {
     onlyIf {
