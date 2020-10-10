@@ -153,6 +153,8 @@ tasks.create("terraform-apply") {
 
 tasks.create("ansible") {
     mustRunAfter("terraform-plan", "terraform-apply", "shadowJar")
+
+    // Only depend on create-inventory if an inventory file needs to be generated from gradle.properties
     File("$rootDir/ansible/inventory")
         .takeIf { it.exists() }
         ?: dependsOn("create-inventory")
