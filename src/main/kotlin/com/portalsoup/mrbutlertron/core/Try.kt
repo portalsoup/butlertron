@@ -16,7 +16,7 @@ sealed class Try<out T> {
     data class Failure(val error: Throwable): Try<Nothing>() {
         companion object {
             fun reason(reason: String): Failure {
-                return Failure(TryFailed(reason))
+                return Failure(TryFailedException(reason))
             }
         }
     }
@@ -53,4 +53,4 @@ sealed class Try<out T> {
     }
 }
 
-data class TryFailed(val reason: String): RuntimeException(reason)
+data class TryFailedException(val reason: String): RuntimeException(reason)

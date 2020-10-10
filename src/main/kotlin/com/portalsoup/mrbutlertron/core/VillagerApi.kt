@@ -27,14 +27,14 @@ fun JSONObject.safeGetInt(int: String): Int? {
 }
 
 data class VillagerDTO(
-    val name: String,
+    val name: String?,
     val url: String?,
     val altName: String?,
     val id: String?,
     val imageUrl: String?,
-    val species: Species,
-    val personality: Personality,
-    val gender: String,
+    val species: Species?,
+    val personality: Personality?,
+    val gender: String?,
     val birthdayMonth: Int?,
     val birthdayDay: Int?,
     val sign: String?,
@@ -45,14 +45,14 @@ data class VillagerDTO(
     companion object {
         fun parse(json: JSONObject): VillagerDTO {
             return VillagerDTO(
-                name = json.getString("name"),
+                name = json.safeGetString("name"),
                 url = json.safeGetString("url"),
                 altName = json.safeGetString("t_name"),
                 id = json.safeGetString("id"),
                 imageUrl = json.safeGetString("image_url"),
-                species = json.getString("species").let { Species.valueOf(it) },
-                personality = json.getString("personality").let { Personality.valueOf(it) },
-                gender = json.getString("gender"),
+                species = json.safeGetString("species")?.let { Species.valueOf(it) },
+                personality = json.safeGetString("personality")?.let { Personality.valueOf(it) },
+                gender = json.safeGetString("gender"),
                 birthdayMonth = json.safeGetInt("birthday_month"),
                 birthdayDay = json.safeGetInt("birthday_day"),
                 sign = json.safeGetString("sign"),
@@ -124,7 +124,11 @@ object VillagerApi {
                         json.getJSONObject(1).getString("name")
                     }\"")
         } else {
-            Try.Success(VillagerDTO.parse(json.getJSONObject(0)))
+            if (json.length() > 0) {
+                Try.Success(VillagerDTO.parse(json.getJSONObject(0)))
+            } else {
+                Try.Failure(TryFailedException("I couldn't find that villager..."))
+            }
         }
     }
 

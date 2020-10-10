@@ -21,6 +21,16 @@ class Villager : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
             }
         }
 
+        // Business logic
+        fun getVillager(name: String? = null, species: String? = null, personality: String? = null): Try<VillagerDTO> {
+            return VillagerApi.lookupVillager(
+                name = name,
+                species = species?.let { s -> Species.valueOf(s.toLowerCase().capitalize()) },
+                personality = personality?.let { p -> Personality.valueOf(p.toLowerCase().capitalize()) }
+            )
+        }
+
+        // Command DSL
         job {
             addRunner { event ->
                 val message = event.message.contentRaw
@@ -31,10 +41,21 @@ class Villager : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
                 val args = findArgs
                     .map { Pair(it, Regex("-$it=(\\S+)").find(message)?.groupValues?.get(1)) }
                     .toMap()
+                val name = message.split(" ")
+                    .takeIf { it.size >= 2 }
+                    ?.get(1)
 
                 println(args)
 
-                if (args.values.isEmpty()) {
+                val maybeVillager = if (args.values.isEmpty() && name != null) {
+                   getVillager(name = name)
+                } else if (args.values.isNotEmpty()) {
+                    getVillager(
+                        name = args["name"],
+                        species = args["species"],
+                        personality = args["personality"]
+                    )
+                } else {
                     event.channel.sendMessage("""
                         >Provide one or more filters to find a villager
                         >Examples:
@@ -48,13 +69,6 @@ class Villager : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
                     return@addRunner
                 }
 
-                val maybeVillager = VillagerApi.lookupVillager(
-                    name = args["name"],
-                    species = args["species"]?.let { s -> Species.valueOf(s.toLowerCase().capitalize()) },
-                    personality = args["personality"]?.let { p -> Personality.valueOf(p.toLowerCase().capitalize()) }
-
-                )
-
                 when (maybeVillager) {
                     is Try.Success -> {
                         maybeVillager.data.imageUrl?.let { img -> event.channel.sendMessage(img) }
@@ -65,7 +79,7 @@ class Villager : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
                     is Try.Failure -> {
                         println(maybeVillager)
                         when (maybeVillager.error) {
-                            is TryFailed -> {
+                            is TryFailedException -> {
                                 println("about to reply failure")
                                 val raw = maybeVillager.error.reason
                                 if (raw.length > 1999) {
