@@ -72,7 +72,7 @@ tasks {
      * Modify existing tasks
      */
 
-    named<ShadowJar>("shadowJar") {
+    shadowJar {
         archiveBaseName.set("shadow")
         mergeServiceFiles()
         manifest {
