@@ -16,6 +16,7 @@ val discordBotToken: String by project
 val nookipediaToken: String by project
 val ansibleDeployIP: String by project
 val deploySshId: String by project
+val botGithubUrl: String by project
 
 val pathToAnsibleInventory = "$rootDir/ansible/inventory"
 
@@ -24,7 +25,8 @@ application {
     applicationDefaultJvmArgs = listOf(
         "-Ddiscord.bot.token=${discordBotToken}",
         "-Ddiscord.bot.name=${discordBotName}",
-        "-Dnookipedia.token=${nookipediaToken}"
+        "-Dnookipedia.token=${nookipediaToken}",
+        "-Dgithub.url=${botGithubUrl}"
     )
 }
 

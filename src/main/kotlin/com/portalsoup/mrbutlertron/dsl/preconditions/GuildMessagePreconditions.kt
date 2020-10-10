@@ -7,16 +7,19 @@ import net.dv8tion.jda.api.events.message.priv.GenericPrivateMessageEvent
 @CommandDsl
 class GuildMessagePreconditions<E: GenericGuildMessageEvent>(val preconditions: MutableList<(E) -> Boolean>) {
 
+    private fun sanitize(event: GenericGuildMessageEvent): String {
+        return event
+            .channel
+            .retrieveMessageById(event.messageId)
+            .complete()
+            .contentRaw
+            .trim()
+    }
+
     fun beginsWith(lambda: () -> String) =
         preconditions.add { event: GenericGuildMessageEvent ->
             try {
-                event
-                    .channel
-                    .retrieveMessageById(event.messageId)
-                    .complete()
-                    .contentRaw
-                    .trim()
-                    .startsWith(lambda())
+                sanitize(event).startsWith(lambda())
             } catch (exception: Throwable) {
                 false
             }
@@ -25,12 +28,16 @@ class GuildMessagePreconditions<E: GenericGuildMessageEvent>(val preconditions: 
     fun matches(regex: () -> String) =
         preconditions.add { event: GenericGuildMessageEvent ->
             try {
-                event
-                    .channel
-                    .retrieveMessageById(event.messageId)
-                    .complete()
-                    .contentRaw.trim()
-                    .matches(Regex(regex()))
+                sanitize(event).matches(Regex(regex()))
+            } catch (exception: Throwable) {
+                false
+            }
+        }
+
+    fun matchesToLowercase(regex: () -> String) =
+        preconditions.add { event: GenericGuildMessageEvent ->
+            try {
+                sanitize(event).toLowerCase().matches(Regex(regex()))
             } catch (exception: Throwable) {
                 false
             }
@@ -39,12 +46,7 @@ class GuildMessagePreconditions<E: GenericGuildMessageEvent>(val preconditions: 
     fun equals(message: () -> String) =
         preconditions.add { event: GenericGuildMessageEvent ->
             try {
-                event
-                    .channel
-                    .retrieveMessageById(event.messageId)
-                    .complete()
-                    .contentRaw.trim()
-                    .equals(message())
+                sanitize(event) == message()
             } catch (exception: Throwable) {
                 false
             }
@@ -53,13 +55,7 @@ class GuildMessagePreconditions<E: GenericGuildMessageEvent>(val preconditions: 
     fun equalsIgnoreCase(message: () -> String) =
         preconditions.add { event: GenericGuildMessageEvent ->
             try {
-                event
-                    .channel
-                    .retrieveMessageById(event.messageId)
-                    .complete()
-                    .contentRaw.trim()
-                    .toLowerCase()
-                    .equals(message().toLowerCase())
+                sanitize(event).toLowerCase() == message().toLowerCase()
             } catch (exception: Throwable) {
                 false
             }
@@ -69,16 +65,20 @@ class GuildMessagePreconditions<E: GenericGuildMessageEvent>(val preconditions: 
 @CommandDsl
 class GuildMessageAuthorPreconditions<E: GenericGuildMessageEvent>(val preconditions: MutableList<(E) -> Boolean>) {
 
+    private fun sanitize(event: GenericGuildMessageEvent): String {
+        return event
+            .channel
+            .retrieveMessageById(event.messageId)
+            .complete()
+            .author
+            .name
+            .trim()
+    }
+
     fun beginsWith(lambda: () -> String) =
         preconditions.add { event: GenericGuildMessageEvent ->
             try {
-                event
-                    .channel
-                    .retrieveMessageById(event.messageId)
-                    .complete()
-                    .author
-                    .name
-                    .startsWith(lambda())
+                sanitize(event).startsWith(lambda())
             } catch (exception: Throwable) {
                 false
             }
@@ -87,13 +87,7 @@ class GuildMessageAuthorPreconditions<E: GenericGuildMessageEvent>(val precondit
     fun matches(regex: () -> String) =
         preconditions.add { event: GenericGuildMessageEvent ->
             try {
-                event
-                    .channel
-                    .retrieveMessageById(event.messageId)
-                    .complete()
-                    .author
-                    .name
-                    .matches(Regex(regex()))
+                sanitize(event).matches(Regex(regex()))
             } catch (exception: Throwable) {
                 false
             }
@@ -102,13 +96,7 @@ class GuildMessageAuthorPreconditions<E: GenericGuildMessageEvent>(val precondit
     fun equals(message: () -> String) =
         preconditions.add { event: GenericGuildMessageEvent ->
             try {
-                event
-                    .channel
-                    .retrieveMessageById(event.messageId)
-                    .complete()
-                    .author
-                    .name
-                    .equals(message())
+                sanitize(event) == message()
             } catch (exception: Throwable) {
                 false
             }
@@ -117,13 +105,7 @@ class GuildMessageAuthorPreconditions<E: GenericGuildMessageEvent>(val precondit
     fun equalsIgnoreCase(message: () -> String) =
         preconditions.add { event: GenericGuildMessageEvent ->
             try {
-                event
-                    .channel
-                    .retrieveMessageById(event.messageId)
-                    .complete()
-                    .contentRaw.trim()
-                    .toLowerCase()
-                    .equals(message().toLowerCase())
+                sanitize(event).toLowerCase() == message().toLowerCase()
             } catch (exception: Throwable) {
                 false
             }

@@ -14,7 +14,6 @@ class PersonalPingPong : PrivateMessageReceivedCommand<PrivateMessageReceivedEve
         name { "`ping`-pong" }
 
         preconditions {
-            getLogger(javaClass).info("Entered preconditions for ping pong")
             message {
                 equalsIgnoreCase {
                     "ping"

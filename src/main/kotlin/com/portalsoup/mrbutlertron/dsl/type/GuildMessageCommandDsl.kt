@@ -6,6 +6,7 @@ import com.portalsoup.discordbot.core.command.JobBuilder
 import com.portalsoup.discordbot.core.command.PreconditionListBuilder
 import com.portalsoup.discordbot.core.command.preconditions.GuildMessageAuthorPreconditions
 import com.portalsoup.discordbot.core.command.preconditions.GuildMessagePreconditions
+import com.portalsoup.mrbutlertron.Environment
 import net.dv8tion.jda.api.events.message.guild.GenericGuildMessageEvent
 
 @CommandDsl
@@ -35,11 +36,7 @@ class GuildMessagePreconditionListBuilder<E : GenericGuildMessageEvent> : Precon
 
 @CommandDsl
 open class GuildMessageJobBuilder<E : GenericGuildMessageEvent> : JobBuilder<E>() {
-    fun reply(lambda: () -> String) {
-        addRunner { event ->
-            event.channel.sendMessage(lambda()).queue()
-        }
-    }
+    fun reply(lambda: (E) -> String) = addRunner { it.channel.sendMessage(lambda(it)).queue() }
 
     fun replyDM(lambda: () -> String) {
         addRunner { event ->

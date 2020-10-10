@@ -10,8 +10,8 @@ class ButlerQuotes : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
     sendMessage {
         preconditions {
             message {
-                matches {
-                    "mr\\.*\\s*butlertron"
+                matchesToLowercase {
+                    "!mr\\.*\\s*butlertron"
                 }
             }
         }

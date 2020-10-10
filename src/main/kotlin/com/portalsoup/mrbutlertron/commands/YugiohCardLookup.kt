@@ -2,31 +2,28 @@ package com.portalsoup.mrbutlertron.commands
 
 import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
 import com.portalsoup.discordbot.core.command.command
+import com.portalsoup.discordbot.core.command.type.sendMessage
 import com.portalsoup.discordbot.core.extensions.Api
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.json.JSONArray
 import org.json.JSONException
+import org.json.JSONObject
 import java.lang.RuntimeException
 
 class YugiohCardLookup : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
 
-    command {
-
+    sendMessage {
         name { "Yugioh Card Lookup" }
-
-        description { "`ygo {card-name}`" }
+        description { "ygo {card-name}" }
 
         preconditions {
-            predicate {
-                it.message.contentRaw
-                    .toLowerCase()
-                    .trim()
-                    .startsWith("ygo")
+            message {
+                beginsWith { "ygo" }
             }
         }
 
         job {
-            addRunner {
+            reply {
                 val url = "https://db.ygoprodeck.com/api/v5/cardinfo.php?fname="
 
                 try {
@@ -36,7 +33,7 @@ class YugiohCardLookup : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
                         .trim()
                         .replace(" ", "%20")
                     val response = Api.makeRequest(url + term)
-                    val imageUrl = try {
+                    try {
                         val outerArray = JSONArray(response)
                         val firstMatch = outerArray.getJSONObject(0)
                         val imagesArray = firstMatch.getJSONArray("card_images")
@@ -46,9 +43,9 @@ class YugiohCardLookup : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
                     } catch (e: JSONException) {
                         "No match"
                     }
-                    it.channel.sendMessage(imageUrl).queue()
                 } catch (e2: RuntimeException) {
                     it.channel.addReactionById(it.message.id, "❌")
+                    "Oops, something went wrong"
                 }
             }
         }

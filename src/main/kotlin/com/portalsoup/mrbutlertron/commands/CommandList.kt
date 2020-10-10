@@ -13,7 +13,7 @@ class CommandList : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
 
         preconditions {
             message {
-                matches { "!(mr(\\.)?(\\s+)?)?butler(tron)?\\s+list" }
+                matchesToLowercase { "!(mr(\\.)?(\\s+)?)?butler(tron)?\\s+list" }
             }
         }
 
@@ -26,9 +26,9 @@ class CommandList : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
 
                 val stringBuilder: StringBuilder = StringBuilder("\nCommands:\n")
 
-                dslCommands.map { it: GuildMessageReceivedCommand<*> ->
-                    val name = it.command.name.ifEmpty { it::class.simpleName }
-                    val description: String = it.command.description
+                dslCommands.map { command: GuildMessageReceivedCommand<*> ->
+                    val name = command.command.name.ifEmpty { command::class.simpleName }
+                    val description: String = command.command.description
                         .split(Regex("\\n"))
                         .map { "--- $it" }
                         .joinToString(separator = "\n")

@@ -1,30 +1,26 @@
 package com.portalsoup.mrbutlertron.commands
 
-import com.portalsoup.discordbot.core.command.GuildJoinCommand
 import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
 import com.portalsoup.discordbot.core.command.command
 import com.portalsoup.discordbot.core.command.type.sendMessage
-import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.events.guild.GuildJoinEvent
+import com.portalsoup.mrbutlertron.Environment
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
-import javax.annotation.RegEx
 
-class CommandSandbox : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
-
+class SourceCodeLocation : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
     sendMessage {
+        description {
+            "Ask Mr butlertron where his source code is"
+        }
+
         preconditions {
             message {
-                beginsWith { "!sandbox" }
+                matchesToLowercase { ".*mr.*butlertron.*source.*code.*" }
             }
         }
 
         job {
             reply {
-                "Wow!"
-            }
-
-            replyDM {
-                "Wow!"
+                Environment.githubUrl ?: "I don't know"
             }
         }
     }
