@@ -125,8 +125,7 @@ tasks.create("terraform-plan") {
         when (planResult.exitValue) {
             0 -> {
                 println("Accept this plan? (Type 'yes' to accept)")
-                val input = readLine()
-                input
+                readLine()
                     ?.takeIf { it == "yes" }
                     ?: throw GradleException("Terraform planned changes were rejected")
             }
