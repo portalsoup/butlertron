@@ -67,6 +67,11 @@ flyway {
 // jar stuff
 
 tasks {
+
+    /*
+     * Modify existing tasks
+     */
+
     named<ShadowJar>("shadowJar") {
         archiveBaseName.set("shadow")
         mergeServiceFiles()
@@ -76,116 +81,118 @@ tasks {
             ))
         }
     }
-}
 
-tasks {
     build {
         dependsOn(shadowJar)
     }
-}
 
-tasks.create("deploy") {
-    dependsOn("shadowJar", "terraform-apply", "ansible")
-}
+    /*
+     * Create new tasks
+     */
 
-tasks.create("terraform-init") {
-    onlyIf {
-        println("Checking for the presence of terraform/data.tf")
-        File("$rootDir/terraform/data.tf").exists()
+    create("deploy") {
+        dependsOn("shadowJar", "terraform-apply", "ansible")
     }
 
-    doLast {
-        project.exec {
-            workingDir("$rootDir/terraform")
-            commandLine("terraform", "init")
+    create("terraform-init") {
+        onlyIf {
+            println("Checking for the presence of terraform/data.tf")
+            File("$rootDir/terraform/data.tf").exists()
         }
-    }
-}
 
-/*
- * By depending on this task, you require a user to manually validate the calculated diff.  If rejected this task
- * prevents downstream tasks from performing any changes
- */
-tasks.create("terraform-plan") {
-    onlyIf {
-        println("Checking for the presence of terraform/data.tf")
-        File("$rootDir/terraform/data.tf").exists()
-    }
-
-    // configure stdin for prompts
-    val run by tasks.getting(JavaExec::class) {
-        standardInput = System.`in`
-    }
-
-    doLast {
-        val planResult = project.exec {
-            workingDir("$rootDir/terraform")
-            commandLine("terraform", "plan", "--var", "ssh_id=${deploySshId}")
-        }
-        when (planResult.exitValue) {
-            0 -> {
-                println("Accept this plan? (Type 'yes' to accept)")
-                readLine()
-                    ?.takeIf { it == "yes" }
-                    ?: throw GradleException("Terraform planned changes were rejected")
+        doLast {
+            project.exec {
+                workingDir("$rootDir/terraform")
+                commandLine("terraform", "init")
             }
-            else -> throw GradleException("Unexpected failure $planResult")
         }
     }
-}
 
-tasks.create("terraform-apply") {
-    dependsOn("terraform-plan")
+    /*
+     * By depending on this task, you require a user to manually validate the calculated diff.  If rejected this task
+     * prevents downstream tasks from performing any changes
+     */
+    create("terraform-plan") {
+        onlyIf {
+            println("Checking for the presence of terraform/data.tf")
+            File("$rootDir/terraform/data.tf").exists()
+        }
 
-    onlyIf {
-        println("Checking for the presence of terraform/data.tf")
-        File("$rootDir/terraform/data.tf").exists()
-    }
+        // configure stdin for prompts
+        val run by getting(JavaExec::class) {
+            standardInput = System.`in`
+        }
 
-    doLast {
-        project.exec {
-            workingDir("$rootDir/terraform")
-            commandLine("terraform", "apply", "--var", "ssh_id=${deploySshId}")
+        doLast {
+            val planResult = project.exec {
+                workingDir("$rootDir/terraform")
+                commandLine("terraform", "plan", "--var", "ssh_id=${deploySshId}")
+            }
+            when (planResult.exitValue) {
+                0 -> {
+                    println("Accept this plan? (Type 'yes' to accept)")
+                    readLine()
+                        ?.takeIf { it == "yes" }
+                        ?: throw GradleException("Terraform planned changes were rejected")
+                }
+                else -> throw GradleException("Unexpected failure $planResult")
+            }
         }
     }
-}
 
-tasks.create("ansible") {
-    mustRunAfter("terraform-plan", "terraform-apply", "shadowJar")
+    create("terraform-apply") {
+        dependsOn("terraform-plan")
 
-    // Only depend on create-inventory if an inventory file needs to be generated from gradle.properties
-    File("$rootDir/ansible/inventory")
-        .takeIf { it.exists() }
-        ?: dependsOn("create-inventory")
+        onlyIf {
+            println("Checking for the presence of terraform/data.tf")
+            File("$rootDir/terraform/data.tf").exists()
+        }
 
-    doLast {
-        val sshUser = project.properties["sshUser"]
-            ?.let { it as String }
-            ?.takeIf { it.isNotEmpty() }
-            ?: "root"
+        doLast {
+            project.exec {
+                workingDir("$rootDir/terraform")
+                commandLine("terraform", "apply", "--var", "ssh_id=${deploySshId}")
+            }
+        }
+    }
 
-        project.exec {
-            workingDir("$rootDir/ansible")
-            commandLine("ansible-playbook",
-                "-u", sshUser,
-                "--extra-vars", "{\"nookipedia\": ${nookipediaToken}, \"bot\": ${discordBotToken}}",
-                "-i", pathToAnsibleInventory,
-                "butlertron.yml"
+    create("ansible") {
+        mustRunAfter("terraform-plan", "terraform-apply", "shadowJar")
+
+        // Only depend on create-inventory if an inventory file needs to be generated from gradle.properties
+        File("$rootDir/ansible/inventory")
+            .takeIf { it.exists() }
+            ?: dependsOn("create-inventory")
+
+        doLast {
+            val sshUser = project.properties["sshUser"]
+                ?.let { it as String }
+                ?.takeIf { it.isNotEmpty() }
+                ?: "root"
+
+            project.exec {
+                workingDir("$rootDir/ansible")
+                commandLine("ansible-playbook",
+                    "-u", sshUser,
+                    "--extra-vars", "{\"nookipedia\": ${nookipediaToken}, \"bot\": ${discordBotToken}}",
+                    "-i", pathToAnsibleInventory,
+                    "butlertron.yml"
                 )
+            }
         }
     }
-}
 
-tasks.create("create-inventory") {
-    onlyIf {
-        println("Checking for the presence of terraform/data.tf")
-        !File(pathToAnsibleInventory).exists()
-    }
+    create("create-inventory") {
+        onlyIf {
+            println("Checking for the presence of terraform/data.tf")
+            !File(pathToAnsibleInventory).exists()
+        }
 
-    doLast {
-        File(pathToAnsibleInventory).writeText("""
+        doLast {
+            File(pathToAnsibleInventory).writeText("""
             [butlertron]
             $ansibleDeployIP
         """.trimIndent())
+        }
     }
 }
