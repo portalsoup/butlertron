@@ -10,12 +10,21 @@ plugins {
 project.group = "com.portalsoup"
 project.version = "1.0-SNAPSHOT"
 
+// Variables required from gradle.properties
+val discordBotName: String by project
+val discordBotToken: String by project
+val nookipediaToken: String by project
+val ansibleDeployIP: String by project
+val deploySshId: String by project
+
+val pathToAnsibleInventory = "$rootDir/ansible/inventory"
+
 application {
     mainClassName = "com.portalsoup.mrbutlertron.MainKt"
     applicationDefaultJvmArgs = listOf(
-        "-Ddiscord.bot.token=${project.property("discord.bot.token")}",
-        "-Ddiscord.bot.name=${project.property("discord.bot.name")}",
-        "-Dnookipedia.token=${project.property("nookipedia.token")}"
+        "-Ddiscord.bot.token=${discordBotToken}",
+        "-Ddiscord.bot.name=${discordBotName}",
+        "-Dnookipedia.token=${nookipediaToken}"
     )
 }
 
@@ -109,7 +118,7 @@ tasks.create("terraform-plan") {
     doLast {
         val planResult = project.exec {
             workingDir("$rootDir/terraform")
-            commandLine("terraform", "plan")
+            commandLine("terraform", "plan", "--var", "ssh_id=${deploySshId}")
         }
         when (planResult.exitValue) {
             0 -> {
@@ -135,28 +144,18 @@ tasks.create("terraform-apply") {
     doLast {
         project.exec {
             workingDir("$rootDir/terraform")
-            commandLine("terraform", "apply")
+            commandLine("terraform", "apply", "--var", "ssh_id=${deploySshId}")
         }
     }
 }
 
 tasks.create("ansible") {
     mustRunAfter("terraform-plan", "terraform-apply", "shadowJar")
-    onlyIf {
-        println("Checking for the presence of ansible/vars.yml")
-        File("$rootDir/ansible/vars.yml").exists()
-    }
+    File("$rootDir/ansible/inventory")
+        .takeIf { it.exists() }
+        ?: dependsOn("create-inventory")
 
     doLast {
-        // optional arg, required if the bot token contained in $vars.yml is vault encrypted
-        val vaultFileArg = project.properties["vaultPassword"]
-            ?.let { it as String }
-            ?.let { File(it) }
-            ?.takeIf { it.exists() }
-            ?.let { it.absolutePath }
-            ?.let { listOf("--vault-password-file", it) }
-            ?: listOf()
-
         val sshUser = project.properties["sshUser"]
             ?.let { it as String }
             ?.takeIf { it.isNotEmpty() }
@@ -164,7 +163,26 @@ tasks.create("ansible") {
 
         project.exec {
             workingDir("$rootDir/ansible")
-            commandLine("ansible-playbook", "-u", sshUser, "butlertron.yml", *(vaultFileArg.toTypedArray()))
+            commandLine("ansible-playbook",
+                "-u", sshUser,
+                "--extra-vars", "{\"nookipedia\": ${nookipediaToken}, \"bot\": ${discordBotToken}}",
+                "-i", pathToAnsibleInventory,
+                "butlertron.yml"
+                )
         }
+    }
+}
+
+tasks.create("create-inventory") {
+    onlyIf {
+        println("Checking for the presence of terraform/data.tf")
+        !File(pathToAnsibleInventory).exists()
+    }
+
+    doLast {
+        File(pathToAnsibleInventory).writeText("""
+            [butlertron]
+            $ansibleDeployIP
+        """.trimIndent())
     }
 }

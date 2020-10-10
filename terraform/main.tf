@@ -1,5 +1,9 @@
 provider "digitalocean" {}
 
+variable "ssh_id" {
+  type = "string"
+}
+
 resource "digitalocean_droplet" "bot" {
   image  = "ubuntu-18-04-x64"
   name   = "butlertron"
