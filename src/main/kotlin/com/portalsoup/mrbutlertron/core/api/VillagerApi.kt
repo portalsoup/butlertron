@@ -1,30 +1,10 @@
-package com.portalsoup.mrbutlertron.core
+package com.portalsoup.mrbutlertron.core.api
 
-import com.portalsoup.discordbot.core.extensions.Api
 import com.portalsoup.mrbutlertron.Environment
+import com.portalsoup.mrbutlertron.core.Try
+import com.portalsoup.mrbutlertron.core.TryFailedException
 import org.json.JSONArray
 import org.json.JSONObject
-import java.lang.RuntimeException
-
-fun JSONObject.safeGetString(str: String): String? {
-    return if (has(str)) {
-        getString(str)
-    } else {
-        null
-    }
-}
-
-fun JSONObject.safeGetInt(int: String): Int? {
-    return if (has(int)) {
-        return try {
-            getString(int).toInt()
-        } catch (e: RuntimeException) {
-            null
-        }
-    } else {
-        null
-    }
-}
 
 data class VillagerDTO(
     val name: String?,

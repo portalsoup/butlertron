@@ -2,7 +2,7 @@ package com.portalsoup.mrbutlertron.commands
 
 import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
 import com.portalsoup.discordbot.core.command.command
-import com.portalsoup.discordbot.core.extensions.Api
+import com.portalsoup.mrbutlertron.core.api.Api
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.json.JSONObject
 import java.lang.RuntimeException

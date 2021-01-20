@@ -4,6 +4,7 @@ import com.portalsoup.mrbutlertron.core.getLogger
 import com.portalsoup.mrbutlertron.data.DatabaseFactory
 import net.dv8tion.jda.api.AccountType
 import net.dv8tion.jda.api.JDABuilder
+import net.dv8tion.jda.api.requests.GatewayIntent
 
 class DiscordBot(val name: String, val token: String) {
     private val log = getLogger(javaClass)
@@ -12,9 +13,8 @@ class DiscordBot(val name: String, val token: String) {
         val token = token
         log.debug("token: ${token}")
 
-        JDABuilder(AccountType.BOT)
+        JDABuilder.createDefault(token)
             .addEventListeners(EventListener(this))
-            .setToken(token)
             .setAutoReconnect(true)
             .build()
             .awaitReady()

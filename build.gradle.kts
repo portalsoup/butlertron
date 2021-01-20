@@ -20,16 +20,6 @@ val botGithubUrl: String by project
 
 val pathToAnsibleInventory = "$rootDir/ansible/inventory"
 
-application {
-    mainClassName = "com.portalsoup.mrbutlertron.MainKt"
-    applicationDefaultJvmArgs = listOf(
-        "-Ddiscord.bot.token=${discordBotToken}",
-        "-Ddiscord.bot.name=${discordBotName}",
-        "-Dnookipedia.token=${nookipediaToken}",
-        "-Dgithub.url=${botGithubUrl}"
-    )
-}
-
 repositories {
     mavenCentral()
     jcenter()
@@ -39,9 +29,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.reflections:reflections:0.9.11")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.hibernate:hibernate-gradle-plugin:5.4.1.Final")
-    implementation("com.h2database:h2:1.4.198")
-    implementation("net.dv8tion:JDA:4.0.0_76")
+    implementation("net.dv8tion:JDA:4.2.0_227")
     implementation("org.json:json:20190722")
     implementation("org.slf4j:slf4j-api:1.7.30")
     implementation("ch.qos.logback:logback-core:1.2.3")
@@ -56,6 +44,16 @@ dependencies {
     compile("com.zaxxer:HikariCP:2.7.8")
 
     compile("org.flywaydb:flyway-core:6.4.0")
+}
+
+application {
+    mainClassName = "com.portalsoup.mrbutlertron.MainKt"
+    applicationDefaultJvmArgs = listOf(
+        "-Ddiscord.bot.token=${discordBotToken}",
+        "-Ddiscord.bot.name=${discordBotName}",
+        "-Dnookipedia.token=${nookipediaToken}",
+        "-Dgithub.url=${botGithubUrl}"
+    )
 }
 
 flyway {

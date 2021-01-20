@@ -3,9 +3,13 @@ package com.portalsoup.mrbutlertron.commands.animalcrossing
 import com.portalsoup.discordbot.core.command.GuildMessageReceivedCommand
 import com.portalsoup.discordbot.core.command.command
 import com.portalsoup.mrbutlertron.core.*
+import com.portalsoup.mrbutlertron.core.api.Personality
+import com.portalsoup.mrbutlertron.core.api.Species
+import com.portalsoup.mrbutlertron.core.api.VillagerApi
+import com.portalsoup.mrbutlertron.core.api.VillagerDTO
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 
-class Villager : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
+class VillagerLookup : GuildMessageReceivedCommand<GuildMessageReceivedEvent>(
 
     command {
 
