@@ -1,6 +1,6 @@
 # Local run
 
-Create a gradle.properties file and set the property `discord.bot.token`.  Then run:
+Create a gradle.properties file and set the property `discordBotToken`.  Then run:
 
     ./gradlew run
     
