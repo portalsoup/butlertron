@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
     application
     kotlin("jvm") version "1.3.70"
@@ -26,6 +24,13 @@ repositories {
 }
 
 dependencies {
+    // kotlin scripting
+    implementation("org.jetbrains.kotlin:kotlin-script-runtime")
+    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
+    implementation("org.jetbrains.kotlin:kotlin-script-util")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable")
+
+//    implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223:jar:1.4.10")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.reflections:reflections:0.9.11")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -35,15 +40,17 @@ dependencies {
     implementation("ch.qos.logback:logback-core:1.2.3")
     implementation("ch.qos.logback:logback-classic:1.2.3")
 
-    compile("com.h2database:h2:1.4.200")
+    implementation("com.h2database:h2:1.4.200")
 
-    compile("org.jetbrains.exposed", "exposed-core", "0.23.1")
-    compile("org.jetbrains.exposed", "exposed-dao", "0.23.1")
-    compile("org.jetbrains.exposed", "exposed-jdbc", "0.23.1")
-    compile("org.jetbrains.exposed:exposed-java-time:0.23.1")
-    compile("com.zaxxer:HikariCP:2.7.8")
+    implementation("org.jetbrains.exposed", "exposed-core", "0.23.1")
+    implementation("org.jetbrains.exposed", "exposed-dao", "0.23.1")
+    implementation("org.jetbrains.exposed", "exposed-jdbc", "0.23.1")
+    implementation("org.jetbrains.exposed:exposed-java-time:0.23.1")
+    implementation("com.zaxxer:HikariCP:2.7.8")
 
-    compile("org.flywaydb:flyway-core:6.4.0")
+    implementation("org.flywaydb:flyway-core:6.4.0")
+
+    testImplementation("org.testng:testng:7.4.0")
 }
 
 application {
@@ -56,11 +63,11 @@ application {
     )
 }
 
-flyway {
-    url = "jdbc:h2:./database/app"
-    user = "bot"
-    password = ""
-}
+//flyway {
+//    url = "jdbc:h2:./database/app"
+//    user = "bot"
+//    password = ""
+//}
 
 // jar stuff
 
@@ -69,6 +76,17 @@ tasks {
     /*
      * Modify existing tasks
      */
+
+    test {
+        // enable TestNG support (default is JUnit)
+        useTestNG()
+
+        // show standard out and standard error of the test JVM(s) on the console
+        testLogging.showStandardStreams = true
+
+        // Fail the 'test' task on the first test failure
+        failFast = false
+    }
 
     shadowJar {
         archiveBaseName.set("shadow")
