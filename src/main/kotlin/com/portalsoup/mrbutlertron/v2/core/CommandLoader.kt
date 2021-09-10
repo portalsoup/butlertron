@@ -23,8 +23,9 @@ class CommandLoader(
         fun load(): List<Command> = File(Bot::class.java.getResource("/commands/")?.file ?: "")
             .takeIf { it.isDirectory }
             ?.walk()
-            ?.onEach { println("Found a file ${it.name}") }
             ?.filter { it.isFile }
+            ?.filter { it.name.endsWith(".command.kts") }
+            ?.onEach { println("Found a file ${it.name}") }
             ?.map { with(ScriptEngineManager().getEngineByExtension("kts")) { eval(it.readText()) }}
             ?.filter { it is Command }
             ?.toList() as List<Command>

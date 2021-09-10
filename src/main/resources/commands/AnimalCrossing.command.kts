@@ -7,7 +7,6 @@ import com.portalsoup.mrbutlertron.v2.core.api.VillagerDTO
 import com.portalsoup.mrbutlertron.v2.core.formattedMessage
 import com.portalsoup.mrbutlertron.v2.core.reply
 import com.portalsoup.mrbutlertron.v2.dsl.command
-import kotlin.reflect.jvm.internal.impl.descriptors.runtime.components.RuntimeSourceElementFactory
 
 fun getVillager(name: String? = null, species: String? = null, personality: String? = null): Try<VillagerDTO> {
     return VillagerApi.lookupVillager(

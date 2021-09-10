@@ -1,6 +1,8 @@
 package com.portalsoup.mrbutlertron.v2.dsl
 
+import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import kotlin.reflect.KClass
 
 /**
  * DSL entrypoint for commands
