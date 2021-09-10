@@ -3,8 +3,8 @@ import com.portalsoup.mrbutlertron.v2.core.reply
 import com.portalsoup.mrbutlertron.v2.dsl.command
 
 command {
-    name = "Shin-chan jobs"
-    description = "A collection of shin-chan jobs"
+    name = "Shin-chan quotes"
+    description = "A collection of shin-chan quotes"
 
     job {
         precondition {

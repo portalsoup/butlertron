@@ -1,17 +1,9 @@
 package com.portalsoup.mrbutlertron.v2.dsl
 
-import net.dv8tion.jda.api.events.Event
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
-import kotlin.reflect.KClass
-
-//enum class EventTypes {
-//    GuildMessageReceived,
-//    GuildMemberJoined,
-//    PrivateMessageReceived
-//}
 
 /**
- * Command
+ * DSL entrypoint for commands
  */
 fun command(lambda: CommandBuilder.() -> Unit) = CommandBuilder().apply(lambda).build()
 
@@ -45,39 +37,13 @@ class CommandBuilder(
 /**
  * Job
  */
-//data class JobContext(
-//    private val respondTo: MutableList<KClass<Event>> = mutableListOf(),
-//    private val preconditions: MutableList<(Event) -> Boolean> = mutableListOf()
-//) {
-//    fun <E: Event>listen(vararg events: KClass<out E>) {
-//        respondTo + events
-//    }
-//
-//    fun precondition(predicate: (Event) -> Boolean) {
-//        preconditions.add(predicate)
-//    }
-//}
-
-//class JobContextBuilder {
-//    val respondTo: MutableList<out EventTypes> = mutableListOf()
-//    val preconditions: MutableList<(Event) -> Boolean> = mutableListOf()
-//
-//    fun listen(vararg events: EventTypes) {
-//        respondTo + events
-//    }
-//
-//    fun precondition(predicate: (Event) -> Boolean) {
-//        preconditions.add(predicate)
-//    }
-//}
-
 class Job(
-    val run: (MessageReceivedEvent) -> Unit = { Unit },
+    val run: (MessageReceivedEvent) -> Unit = { },
     val preconditions: MutableList<(MessageReceivedEvent) -> Boolean> = mutableListOf()
 )
 
 class JobBuilder {
-    var run: (MessageReceivedEvent) -> Unit = { Unit }
+    var run: (MessageReceivedEvent) -> Unit = { }
     var preconditions: MutableList<(MessageReceivedEvent) -> Boolean> = mutableListOf()
 
    internal fun build() = Job(run, preconditions)

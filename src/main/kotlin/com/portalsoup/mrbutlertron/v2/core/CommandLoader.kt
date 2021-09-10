@@ -20,16 +20,14 @@ class CommandLoader(
     private val log = getLogger(javaClass)
 
     companion object {
-        fun load(): List<Command> {
-            return File(Bot::class.java.getResource("/commands/")?.file ?: "")
-                .takeIf { it.isDirectory }
-                ?.walk()
-                ?.onEach { println("Found a file ${it.name}") }
-                ?.filter { it.isFile }
-                ?.map { with(ScriptEngineManager().getEngineByExtension("kts")) { eval(it.readText()) }}
-                ?.filter { it is Command }
-                ?.toList() as List<Command>
-        }
+        fun load(): List<Command> = File(Bot::class.java.getResource("/commands/")?.file ?: "")
+            .takeIf { it.isDirectory }
+            ?.walk()
+            ?.onEach { println("Found a file ${it.name}") }
+            ?.filter { it.isFile }
+            ?.map { with(ScriptEngineManager().getEngineByExtension("kts")) { eval(it.readText()) }}
+            ?.filter { it is Command }
+            ?.toList() as List<Command>
     }
 
     override fun onMessageReceived(event: MessageReceivedEvent) {

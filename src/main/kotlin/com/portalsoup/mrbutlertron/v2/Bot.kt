@@ -9,6 +9,10 @@ class Bot(val name: String, val token: String) {
 
     private val log = getLogger(javaClass)
 
+    fun isEnumTypeValid(enumClass: Class<*>, value: String) = enumClass.enumConstants
+            ?.let { it as Array<Enum<*>> }
+            ?.firstOrNull { it.name.equals(value, true) } != null
+
     val jda by lazy {
         val token = token
         log.debug("token: ${token}")

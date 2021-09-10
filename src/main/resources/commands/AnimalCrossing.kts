@@ -7,6 +7,7 @@ import com.portalsoup.mrbutlertron.v2.core.api.VillagerDTO
 import com.portalsoup.mrbutlertron.v2.core.formattedMessage
 import com.portalsoup.mrbutlertron.v2.core.reply
 import com.portalsoup.mrbutlertron.v2.dsl.command
+import kotlin.reflect.jvm.internal.impl.descriptors.runtime.components.RuntimeSourceElementFactory
 
 fun getVillager(name: String? = null, species: String? = null, personality: String? = null): Try<VillagerDTO> {
     return VillagerApi.lookupVillager(
@@ -25,64 +26,64 @@ command {
             it.formattedMessage().startsWith("!villager")
         }
         action { event ->
-//            val message = event.message.contentRaw
-//
-//            val findArgs = Regex("-(\\S+)=").findAll(message)
-//                .map { arg -> arg.groupValues[1] }
-//
-//            val args = findArgs
-//                .map { Pair(it, Regex("-$it=(\\S+)").find(message)?.groupValues?.get(1)) }
-//                .toMap()
-//            val name = message.split(" ")
-//                .takeIf { it.size >= 2 }
-//                ?.get(1)
-//
-//            println(args)
+            val message = event.message.contentRaw
 
-//            val maybeVillager = if (args.values.isEmpty() && name != null) {
-//                getVillager(name = name)
-//            } else if (args.values.isNotEmpty()) {
-//                getVillager(
-//                    name = args["name"],
-//                    species = args["species"],
-//                    personality = args["personality"]
-//                )
-//            } else {
-//                event.reply("""
-//                        >Provide one or more filters to find a villager
-//                        >Examples:
-//                        >    -name=bam
-//                        >    -species=deer
-//                        >    -personality=jock
-//                        >
-//                        >Example command:
-//                        >    !villager -name=bam -species=deer
-//                    """.trimMargin(">"))
-//                return@action
-//            }
-//
-//            when (maybeVillager) {
-//                is Try.Success -> {
-//                    maybeVillager.data.imageUrl?.let { img -> event.channel.sendMessage(img) }
-//                    maybeVillager.data
-//                        .let { villager -> "${villager.url}" }
-//                        .let { event.channel.sendMessage(it).queue() }
-//                }
-//                is Try.Failure -> {
-//                    println(maybeVillager)
-//                    when (maybeVillager.error) {
-//                        is TryFailedException -> {
-//                            println("about to reply failure")
-//                            val raw = maybeVillager.error.reason
-//                            if (raw.length > 1999) {
-//                                event.channel.sendMessage(raw.substring(0, 1998)).queue()
-//                            } else {
-//                                event.channel.sendMessage(raw).queue()
-//                            }
-//                        }
-//                    }
-//                }
-//            }
+            val findArgs = Regex("-(\\S+)=").findAll(message)
+                .map { arg -> arg.groupValues[1] }
+
+            val args = findArgs
+                .map { Pair(it, Regex("-$it=(\\S+)").find(message)?.groupValues?.get(1)) }
+                .toMap()
+            val name = message.split(" ")
+                .takeIf { it.size >= 2 }
+                ?.get(1)
+
+            println(args)
+
+            val maybeVillager = if (args.values.isEmpty() && name != null) {
+                getVillager(name = name)
+            } else if (args.values.isNotEmpty()) {
+                getVillager(
+                    name = args["name"],
+                    species = args["species"],
+                    personality = args["personality"]
+                )
+            } else {
+                event.reply("""
+                        >Provide one or more filters to find a villager
+                        >Examples:
+                        >    -name=bam
+                        >    -species=deer
+                        >    -personality=jock
+                        >
+                        >Example command:
+                        >    !villager -name=bam -species=deer
+                    """.trimMargin(">"))
+                return@action
+            }
+
+            when (maybeVillager) {
+                is Try.Success -> {
+                    maybeVillager.data.imageUrl?.let { img -> event.channel.sendMessage(img) }
+                    maybeVillager.data
+                        .let { villager -> "${villager.url}" }
+                        .let { event.channel.sendMessage(it).queue() }
+                }
+                is Try.Failure -> {
+                    println(maybeVillager)
+                    when (maybeVillager.error) {
+                        is TryFailedException -> {
+                            println("about to reply failure")
+                            val raw = (maybeVillager as Try.Failure).error.message ?: throw RuntimeException("Unknown error")
+                            if (raw.length > 1999) {
+                                event.channel.sendMessage(raw.substring(0, 1998)).queue()
+                            } else {
+                                event.channel.sendMessage(raw).queue()
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

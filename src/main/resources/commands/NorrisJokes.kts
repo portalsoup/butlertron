@@ -9,9 +9,11 @@ command {
     name = "Chuck norris jokes"
     description = "Share random chuck norris jokes"
 
-    // TODO: This gets into a loop.  I think adding a message history table to prevent duplicate responses?
+    // TODO: This got into a loop because the joke output has "chuck norris" in it when the trigger phrase was the same.
+    //  I think adding a sent message history table to prevent self replies that all messages check before
+    //  running preconditions
     job {
-        precondition { it.formattedMessage().matches(Regex(".*chuck*\\snorris.*")) }
+        precondition { it.formattedMessage().matches(Regex("!norris")) }
         action {
             val jokeUrl = "http://api.icndb.com/jokes/random?exclude=[explicit]"
             val response = JSONObject(Api.makeRequest(jokeUrl))

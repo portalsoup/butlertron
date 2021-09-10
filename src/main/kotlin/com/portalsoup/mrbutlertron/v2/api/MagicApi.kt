@@ -1,6 +1,9 @@
 package com.portalsoup.mrbutlertron.v2.api
 
 import com.portalsoup.mrbutlertron.v2.core.api.Api
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import org.json.JSONObject
 import java.lang.RuntimeException
 
@@ -12,8 +15,9 @@ class MagicApi: CardApi() {
     val noResultsText = "Didn't find the card.  The search could have been too broad to confidently" +
             " pick the correct match, or didn't match any cards at all."
 
-    override fun getRawCard(term: String): JSONObject =
-        JSONObject(Api.makeRequest(url + term))
+    override suspend fun getRawCardAsync(term: String): Deferred<JSONObject> = coroutineScope {
+        async { JSONObject(Api.makeRequest(url + term)) }
+    }
 
     override fun getImageUriFromJson(json: JSONObject): String =
         when {
@@ -31,10 +35,10 @@ class MagicApi: CardApi() {
             }
         }
 
-    override fun getCardImage(term: String): String {
+    override suspend fun getCardImage(term: String): String {
         val result = kotlin.runCatching {
-            val json = getRawCard(term)
-            getImageUriFromJson(json)
+            val json = getRawCardAsync(term)
+            getImageUriFromJson(json.await())
         }
 
         return if (result.isSuccess) {

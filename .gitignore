@@ -1,7 +1,7 @@
-/build/
-/.gradle/
+**/build/*
+**/.gradle/*
 .bot_token
-/.idea/
+**/.idea/*
 /database
 gradle.properties
 **/*.db
