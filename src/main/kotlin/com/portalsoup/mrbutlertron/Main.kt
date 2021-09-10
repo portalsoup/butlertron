@@ -2,12 +2,16 @@ package com.portalsoup.mrbutlertron
 
 import com.portalsoup.mrbutlertron.Environment.name
 import com.portalsoup.mrbutlertron.Environment.token
-import com.portalsoup.mrbutlertron.bot.DiscordBot
+import com.portalsoup.mrbutlertron.v2.Bot
+import com.portalsoup.mrbutlertron.v2.core.CommandLoader
 import java.lang.RuntimeException
 
 fun main(args: Array<String>) {
-    DiscordBot(name, token).apply {
-        init()
+
+    val commands = CommandLoader.load()
+    println(commands)
+
+    Bot(name, token).apply {
         run()
     }
 }

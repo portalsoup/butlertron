@@ -1,4 +1,4 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.portalsoup.mrbutlertron.build.dependencies.Dependencies
 
 plugins {
     application
@@ -26,24 +26,34 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.reflections:reflections:0.9.11")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("net.dv8tion:JDA:4.2.0_227")
-    implementation("org.json:json:20190722")
-    implementation("org.slf4j:slf4j-api:1.7.30")
-    implementation("ch.qos.logback:logback-core:1.2.3")
-    implementation("ch.qos.logback:logback-classic:1.2.3")
+    // kotlin scripting
+    implementation(Dependencies.kotlinScriptRuntime)
+    implementation(Dependencies.kotlinCompilerEmbeddable)
+    implementation(Dependencies.kotlinScriptUtil)
+    implementation(Dependencies.kotlinScriptCompilerEmbeddable)
 
-    compile("com.h2database:h2:1.4.200")
+    implementation(Dependencies.coroutinesCore)
+    implementation(Dependencies.kotlinStdlib)
 
-    compile("org.jetbrains.exposed", "exposed-core", "0.23.1")
-    compile("org.jetbrains.exposed", "exposed-dao", "0.23.1")
-    compile("org.jetbrains.exposed", "exposed-jdbc", "0.23.1")
-    compile("org.jetbrains.exposed:exposed-java-time:0.23.1")
-    compile("com.zaxxer:HikariCP:2.7.8")
+    implementation(Dependencies.reflections)
+    implementation(Dependencies.kotlinReflect)
 
-    compile("org.flywaydb:flyway-core:6.4.0")
+    implementation(Dependencies.discordJda)
+    implementation(Dependencies.json)
+
+    implementation(Dependencies.slf4jApi)
+    implementation(Dependencies.logbackCore)
+    implementation(Dependencies.logbackClassic)
+
+    implementation(Dependencies.h2)
+    implementation(Dependencies.exposedCore)
+    implementation(Dependencies.exposedDao)
+    implementation(Dependencies.exposedJdbc)
+    implementation(Dependencies.exposedJavaTime)
+    implementation(Dependencies.hikari)
+    implementation(Dependencies.flywayCore)
+
+    testImplementation(Dependencies.testng)
 }
 
 application {
@@ -56,11 +66,11 @@ application {
     )
 }
 
-flyway {
-    url = "jdbc:h2:./database/app"
-    user = "bot"
-    password = ""
-}
+//flyway {
+//    url = "jdbc:h2:./database/app"
+//    user = "bot"
+//    password = ""
+//}
 
 // jar stuff
 
@@ -69,6 +79,17 @@ tasks {
     /*
      * Modify existing tasks
      */
+
+    test {
+        // enable TestNG support (default is JUnit)
+        useTestNG()
+
+        // show standard out and standard error of the test JVM(s) on the console
+        testLogging.showStandardStreams = true
+
+        // Fail the 'test' task on the first test failure
+        failFast = false
+    }
 
     shadowJar {
         archiveBaseName.set("shadow")
