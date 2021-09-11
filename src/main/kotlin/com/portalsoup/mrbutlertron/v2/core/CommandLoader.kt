@@ -1,5 +1,6 @@
 package com.portalsoup.mrbutlertron.v2.core
 
+import com.portalsoup.mrbutlertron.Environment
 import com.portalsoup.mrbutlertron.v2.Bot
 import com.portalsoup.mrbutlertron.v2.dsl.Command
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -20,15 +21,23 @@ class CommandLoader(
     private val log = getLogger(javaClass)
 
     companion object {
-        fun load(): List<Command> = File(Bot::class.java.getResource("/commands/")?.file ?: "")
-            .takeIf { it.isDirectory }
-            ?.walk()
-            ?.filter { it.isFile }
-            ?.filter { it.name.endsWith(".command.kts") }
-            ?.onEach { println("Found a file ${it.name}") }
-            ?.map { with(ScriptEngineManager().getEngineByExtension("kts")) { eval(it.readText()) }}
-            ?.filter { it is Command }
-            ?.toList() as List<Command>
+        private val log = getLogger(javaClass)
+
+        fun load(): List<Command> = File(Environment.commandsLocation)
+                .takeIf { it.isDirectory }
+                ?.walk()
+                ?.filter { it.isFile }
+                ?.filter { it.name.endsWith(".command.kts") }
+                ?.onEach { log.debug("Found a file ${it.name}") }
+                ?.map { with(ScriptEngineManager().getEngineByExtension("kts")) { eval(it.readText()) }}
+                ?.filter { it != null && it is Command }
+                ?.onEach { log.debug("Found $it") }
+                ?.mapNotNull { when (it) {
+                    is Command -> it as Command
+                    else -> null
+                }}
+                ?.toList()
+            ?: emptyList()
     }
 
     override fun onMessageReceived(event: MessageReceivedEvent) {

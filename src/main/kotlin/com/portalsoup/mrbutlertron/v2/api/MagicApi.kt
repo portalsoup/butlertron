@@ -1,9 +1,11 @@
 package com.portalsoup.mrbutlertron.v2.api
 
 import com.portalsoup.mrbutlertron.v2.core.api.Api
+import com.portalsoup.mrbutlertron.v2.dsl.cardEmbed
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import net.dv8tion.jda.api.entities.MessageEmbed
 import org.json.JSONObject
 import java.lang.RuntimeException
 
@@ -16,7 +18,7 @@ class MagicApi: CardApi() {
             " pick the correct match, or didn't match any cards at all."
 
     override suspend fun getRawCardAsync(term: String): Deferred<JSONObject> = coroutineScope {
-        async { JSONObject(Api.makeRequest(url + term)) }
+        async { JSONObject(Api.makeRequest(url + term)).also { println(it) } }
     }
 
     override fun getImageUriFromJson(json: JSONObject): String =
@@ -34,6 +36,26 @@ class MagicApi: CardApi() {
                 throw RuntimeException()
             }
         }
+
+    override suspend fun getCardEmbed(term: String): MessageEmbed {
+        val card = getRawCardAsync(term).await()
+        return cardEmbed {
+            uri = kotlin.runCatching { card.getString("scryfall_uri") }.getOrNull() ?: ""
+            cardName = kotlin.runCatching { card.getString("name") }.getOrNull() ?: ""
+            costLabel = "Mana Cost"
+            cost = kotlin.runCatching { card.getString("mana_cost") }.getOrNull() ?: ""
+            oracleText = kotlin.runCatching { card.getString("oracle_text") }.getOrNull() ?: ""
+            flavorText = kotlin.runCatching { card.getString("flavor_text") }.getOrNull() ?: ""
+            cardImage = kotlin.runCatching { card.getJSONObject("image_uris").getString("large") }.getOrNull() ?: ""
+            artCrop = kotlin.runCatching { card.getJSONObject("image_uris").getString("art_crop") }.getOrNull() ?: ""
+            atkLabel = "Power"
+            atk = kotlin.runCatching { card.getString("power") }.getOrNull() ?: ""
+            defLabel = "Toughness"
+            def = kotlin.runCatching { card.getString("toughness") }.getOrNull() ?: ""
+            spellType = kotlin.runCatching { card.getString("type_line") }.getOrNull() ?: ""
+        }
+    }
+
 
     override suspend fun getCardImage(term: String): String {
         val result = kotlin.runCatching {

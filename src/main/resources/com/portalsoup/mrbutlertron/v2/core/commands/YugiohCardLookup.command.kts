@@ -15,7 +15,7 @@ command {
                 .replace("!ygo", "")
                 .trim()
                 .replace(" ", "%20")
-                .let { runBlocking { YugiohApi().getCardImage(it) } }
+                .let { runBlocking { YugiohApi().getCardEmbed(it) } }
 
             event.reply(jpg)
         }

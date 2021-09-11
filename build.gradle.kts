@@ -17,12 +17,22 @@ val nookipediaToken: String by project
 val ansibleDeployIP: String by project
 val deploySshId: String by project
 val botGithubUrl: String by project
+val doToken: String by project
+val commandsLocation: String by project
 
 val pathToAnsibleInventory = "$rootDir/ansible/inventory"
 
 repositories {
     mavenCentral()
     jcenter()
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs("src/main/resources")
+        }
+    }
 }
 
 dependencies {
@@ -62,7 +72,8 @@ application {
         "-Ddiscord.bot.token=${discordBotToken}",
         "-Ddiscord.bot.name=${discordBotName}",
         "-Dnookipedia.token=${nookipediaToken}",
-        "-Dgithub.url=${botGithubUrl}"
+        "-Dgithub.url=${botGithubUrl}",
+        "-Dcommands.location=$commandsLocation"
     )
 }
 
@@ -122,7 +133,9 @@ tasks {
         doLast {
             project.exec {
                 workingDir("$rootDir/terraform")
-                commandLine("terraform", "init")
+                commandLine("terraform", "init",
+                    "-var", "do_token=$doToken"
+                )
             }
         }
     }
@@ -145,7 +158,10 @@ tasks {
         doLast {
             val planResult = project.exec {
                 workingDir("$rootDir/terraform")
-                commandLine("terraform", "plan", "--var", "ssh_id=${deploySshId}")
+                commandLine("terraform", "plan",
+                    "-var", "ssh_id=${deploySshId}",
+                    "-var", "do_token=$doToken"
+                )
             }
             when (planResult.exitValue) {
                 0 -> {
@@ -170,7 +186,11 @@ tasks {
         doLast {
             project.exec {
                 workingDir("$rootDir/terraform")
-                commandLine("terraform", "apply", "--var", "ssh_id=${deploySshId}")
+                commandLine("terraform", "apply",
+                    "-auto-approve",
+                    "-var", "ssh_id=${deploySshId}",
+                    "-var", "do_token=$doToken"
+                )
             }
         }
     }
@@ -193,8 +213,9 @@ tasks {
                 workingDir("$rootDir/ansible")
                 commandLine("ansible-playbook",
                     "-u", sshUser,
-                    "--extra-vars", "{\"nookipedia\": ${nookipediaToken}, \"bot\": ${discordBotToken}}",
+                    "--extra-vars", "{\"nookipedia\": ${nookipediaToken}, \"bot\": ${discordBotToken}, \"commandsDir\": $commandsLocation}",
                     "-i", pathToAnsibleInventory,
+                    "--flush-cache",
                     "butlertron.yml"
                 )
             }

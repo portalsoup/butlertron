@@ -2,9 +2,11 @@ package com.portalsoup.mrbutlertron.v2.api
 
 import com.portalsoup.mrbutlertron.v2.core.api.Api
 import com.portalsoup.mrbutlertron.v2.core.getLogger
+import com.portalsoup.mrbutlertron.v2.dsl.cardEmbed
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import net.dv8tion.jda.api.entities.MessageEmbed
 import org.json.JSONException
 import org.json.JSONObject
 import java.lang.RuntimeException
@@ -28,7 +30,7 @@ class YugiohApi: CardApi() {
     }
 
     override suspend fun getRawCardAsync(term: String): Deferred<JSONObject> = coroutineScope {
-        async { JSONObject(Api.makeRequest(url + term)) }
+        async { JSONObject(Api.makeRequest(url + term)).also { println(it.toString()) }  }
     }
 
     override fun getImageUriFromJson(json: JSONObject): String {
@@ -37,4 +39,22 @@ class YugiohApi: CardApi() {
         val firstImage = imagesArray.getJSONObject(0)
         return firstImage.getString("image_url")
     }
+
+    override suspend fun getCardEmbed(term: String): MessageEmbed {
+        val card = getRawCardAsync(term).await().getJSONArray("data").getJSONObject(0)
+        return cardEmbed {
+            uri = kotlin.runCatching { card.getString("name") }.getOrNull() ?: ""
+            cardName = kotlin.runCatching { card.getString("type") }.getOrNull() ?: ""
+            spellType = kotlin.runCatching { card.getString("race") }.getOrNull() ?: ""
+            costLabel = "Level"
+            cost = kotlin.runCatching { card.getInt("level").toString() }.getOrNull() ?: ""
+            oracleText = kotlin.runCatching { card.getString("desc") }.getOrNull() ?: ""
+            artCrop = kotlin.runCatching { card.getJSONArray("card_images").getJSONObject(0).getString("image_url") }.getOrNull() ?: ""
+            atkLabel = "ATK"
+            atk = kotlin.runCatching { card.getInt("atk").toString() }.getOrNull() ?: ""
+            defLabel = "DEF"
+            def = kotlin.runCatching { card.getInt("def").toString() }.getOrNull() ?: ""
+        }
+    }
+
 }

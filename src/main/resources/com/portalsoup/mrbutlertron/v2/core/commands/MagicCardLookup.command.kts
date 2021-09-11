@@ -12,13 +12,12 @@ command {
     job {
         precondition { it.formattedMessage().startsWith("!mtg") }
         action { event ->
-            val jpg = event.formattedMessage()
+            event.formattedMessage()
                 .replace("!mtg", "")
                 .trim()
                 .replace(" ", "+")
-                .let { runBlocking { MagicApi().getCardImage(it) } }
-
-            event.reply(jpg)
+                .let { runBlocking { MagicApi().getCardEmbed(it) } }
+                .let { event.reply(it) }
         }
     }
 }
