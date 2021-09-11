@@ -3,6 +3,8 @@ package com.portalsoup.mrbutlertron.v2.core.api
 import com.portalsoup.mrbutlertron.Environment
 import com.portalsoup.mrbutlertron.v2.core.Try
 import com.portalsoup.mrbutlertron.v2.core.TryFailedException
+import com.portalsoup.mrbutlertron.v2.dsl.embed
+import net.dv8tion.jda.api.entities.MessageEmbed
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -15,7 +17,7 @@ data class VillagerDTO(
     val species: Species?,
     val personality: Personality?,
     val gender: String?,
-    val birthdayMonth: Int?,
+    val birthdayMonth:  String?,
     val birthdayDay: Int?,
     val sign: String?,
     val quote: String?,
@@ -33,7 +35,7 @@ data class VillagerDTO(
                 species = json.safeGetString("species")?.let { Species.valueOf(it) },
                 personality = json.safeGetString("personality")?.let { Personality.valueOf(it) },
                 gender = json.safeGetString("gender"),
-                birthdayMonth = json.safeGetInt("birthday_month"),
+                birthdayMonth = json.safeGetString("birthday_month"),
                 birthdayDay = json.safeGetInt("birthday_day"),
                 sign = json.safeGetString("sign"),
                 quote = json.safeGetString("quote"),
@@ -112,12 +114,113 @@ object VillagerApi {
         }
     }
 
+    suspend fun embed(
+        name: String?,
+        species: Species?,
+        personality: Personality?
+    ): Try<MessageEmbed> {
+        return when (val it = lookupVillager(name, species, personality)) {
+            is Try.Failure -> it
+            is Try.Success -> embed {
+                val villager = it.data
+                description = villager.url
+
+                thumbnail {
+                    url = ""
+                }
+
+                image {
+                    url = villager.imageUrl
+                }
+
+                footer {
+                    text = "${villager.phrase}"
+                }
+
+                villager.name
+                    ?.also {
+                        field {
+                            this.name = "Name"
+                            value = it
+                            inline = true
+                        }
+                    }
+
+                villager.gender
+                    ?.also {
+                        field {
+                            this.name = "Gender"
+                            value = it
+                            inline = true
+                        }
+                    }
+                (villager.birthdayDay != null || villager.birthdayMonth != null)
+                    .takeIf { it }
+                    ?.also {
+                        field {
+                            this.name = "Birthday"
+                            value = listOf(villager.birthdayMonth, villager.birthdayDay.toString())
+                                .joinToString(" ")
+                            inline = true
+                        }
+                    }
+
+                villager.quote
+                    ?.also {
+                        field {
+                            value = it
+                            inline = false
+                        }
+                    }
+
+                villager.species?.name
+                    ?.also {
+                        field {
+                            this.name = "Species"
+                            value = it
+                            inline = true
+                        }
+                    }
+
+                villager.personality?.name
+                    ?.also {
+                        field {
+                            this.name = "Personality"
+                            value = it
+                            inline = true
+                        }
+                    }
+
+                villager.sign
+                    ?.also {
+                        field {
+                            this.name = "Sign"
+                            value = it
+                            inline = true
+                        }
+                    }
+
+                villager.clothing
+                    ?.also {
+                        field {
+                            this.name = "Clothing"
+                            value = it
+                            inline = true
+                        }
+                    }
+
+
+            }.let { Try.Success(it) }
+        }
+    }
+
 }
 
 enum class Species {
     Alligator,
     Anteater,
     Bear,
+    `Bear cub`,
     Bird,
     Bull,
     Cat,

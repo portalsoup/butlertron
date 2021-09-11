@@ -7,13 +7,17 @@ import com.portalsoup.mrbutlertron.v2.core.api.VillagerDTO
 import com.portalsoup.mrbutlertron.v2.core.formattedMessage
 import com.portalsoup.mrbutlertron.v2.core.reply
 import com.portalsoup.mrbutlertron.v2.dsl.command
+import kotlinx.coroutines.runBlocking
+import net.dv8tion.jda.api.entities.MessageEmbed
 
-fun getVillager(name: String? = null, species: String? = null, personality: String? = null): Try<VillagerDTO> {
-    return VillagerApi.lookupVillager(
-        name = name,
-        species = species?.let { s -> Species.valueOf(s.toLowerCase().capitalize()) },
-        personality = personality?.let { p -> Personality.valueOf(p.toLowerCase().capitalize()) }
-    )
+fun getVillager(name: String? = null, species: String? = null, personality: String? = null): Try<MessageEmbed> {
+    return runBlocking {
+        VillagerApi.embed(
+            name = name,
+            species = species?.let { s -> Species.valueOf(s.toLowerCase().capitalize()) },
+            personality = personality?.let { p -> Personality.valueOf(p.toLowerCase().capitalize()) }
+        )
+    }
 }
 
 command {
@@ -48,7 +52,8 @@ command {
                     personality = args["personality"]
                 )
             } else {
-                event.reply("""
+                event.reply(
+                    """
                         >Provide one or more filters to find a villager
                         >Examples:
                         >    -name=bam
@@ -57,15 +62,14 @@ command {
                         >
                         >Example command:
                         >    !villager -name=bam -species=deer
-                    """.trimMargin(">"))
+                    """.trimMargin(">")
+                )
                 return@action
             }
 
             when (maybeVillager) {
                 is Try.Success -> {
-                    maybeVillager.data.imageUrl?.let { img -> event.channel.sendMessage(img) }
                     maybeVillager.data
-                        .let { villager -> "${villager.url}" }
                         .let { event.channel.sendMessage(it).queue() }
                 }
                 is Try.Failure -> {
@@ -73,7 +77,8 @@ command {
                     when (maybeVillager.error) {
                         is TryFailedException -> {
                             println("about to reply failure")
-                            val raw = (maybeVillager as Try.Failure).error.message ?: throw RuntimeException("Unknown error")
+                            val raw =
+                                maybeVillager.error.message ?: throw RuntimeException("Unknown error")
                             if (raw.length > 1999) {
                                 event.channel.sendMessage(raw.substring(0, 1998)).queue()
                             } else {

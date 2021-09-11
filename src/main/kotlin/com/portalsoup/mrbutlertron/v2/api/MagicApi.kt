@@ -37,7 +37,7 @@ class MagicApi: CardApi() {
             }
         }
 
-    override suspend fun getCardEmbed(term: String): MessageEmbed {
+    override suspend fun embed(term: String): MessageEmbed {
         val card = getRawCardAsync(term).await()
         return cardEmbed {
             uri = kotlin.runCatching { card.getString("scryfall_uri") }.getOrNull() ?: ""

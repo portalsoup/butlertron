@@ -40,7 +40,7 @@ class YugiohApi: CardApi() {
         return firstImage.getString("image_url")
     }
 
-    override suspend fun getCardEmbed(term: String): MessageEmbed {
+    override suspend fun embed(term: String): MessageEmbed {
         val card = getRawCardAsync(term).await().getJSONArray("data").getJSONObject(0)
         return cardEmbed {
             uri = kotlin.runCatching { card.getString("name") }.getOrNull() ?: ""

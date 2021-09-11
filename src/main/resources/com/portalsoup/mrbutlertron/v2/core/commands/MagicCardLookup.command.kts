@@ -3,7 +3,6 @@ import com.portalsoup.mrbutlertron.v2.core.formattedMessage
 import com.portalsoup.mrbutlertron.v2.core.reply
 import com.portalsoup.mrbutlertron.v2.dsl.command
 import kotlinx.coroutines.runBlocking
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 command {
     name = "Magic: The Gathering card lookup"
@@ -16,7 +15,7 @@ command {
                 .replace("!mtg", "")
                 .trim()
                 .replace(" ", "+")
-                .let { runBlocking { MagicApi().getCardEmbed(it) } }
+                .let { runBlocking { MagicApi().embed(it) } }
                 .let { event.reply(it) }
         }
     }
