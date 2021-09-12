@@ -12,6 +12,7 @@ fun main(args: Array<String>) {
     println(commands)
 
     Bot(name, token).apply {
+        init()
         run()
     }
 }

@@ -2,7 +2,7 @@ package com.portalsoup.mrbutlertron.v2.api
 
 import com.portalsoup.mrbutlertron.v2.core.api.Api
 import com.portalsoup.mrbutlertron.v2.core.getLogger
-import com.portalsoup.mrbutlertron.v2.dsl.cardEmbed
+import com.portalsoup.mrbutlertron.v2.dsl.embed.cardEmbed
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope

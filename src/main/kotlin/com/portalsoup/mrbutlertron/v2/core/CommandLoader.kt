@@ -57,10 +57,11 @@ class CommandLoader(
             command.jobs
                 .filter {
                     log.debug("Filtering a job by preconditions")
-                    it.preconditions.toList().also { list -> log.debug("${list.size}") }.filter { condition ->
+                    it.preconditions.toList().any { condition ->
                         log.debug("running preconditions $condition")
                         condition(event).also { res -> log.debug("Precondition: $res") }
-                    }.any() }
+                    }
+                }
         }
             .onEach { log.debug("Survived! $it") }
             .forEach { it.run(event) }

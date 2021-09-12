@@ -1,5 +1,6 @@
 package com.portalsoup.mrbutlertron.v2.dsl
 
+import com.portalsoup.mrbutlertron.v2.core.reply
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class Job(

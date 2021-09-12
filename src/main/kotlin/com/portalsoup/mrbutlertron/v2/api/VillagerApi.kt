@@ -123,10 +123,12 @@ object VillagerApi {
             is Try.Failure -> it
             is Try.Success -> embed {
                 val villager = it.data
-                description = villager.url
+                description = villager.quote
 
-                thumbnail {
-                    url = ""
+                author {
+                    this.name = villager.name
+                    url = villager.url
+
                 }
 
                 image {
@@ -137,15 +139,6 @@ object VillagerApi {
                     text = "${villager.phrase}"
                 }
 
-                villager.name
-                    ?.also {
-                        field {
-                            this.name = "Name"
-                            value = it
-                            inline = true
-                        }
-                    }
-
                 villager.gender
                     ?.also {
                         field {
@@ -154,6 +147,7 @@ object VillagerApi {
                             inline = true
                         }
                     }
+
                 (villager.birthdayDay != null || villager.birthdayMonth != null)
                     .takeIf { it }
                     ?.also {
@@ -162,14 +156,6 @@ object VillagerApi {
                             value = listOf(villager.birthdayMonth, villager.birthdayDay.toString())
                                 .joinToString(" ")
                             inline = true
-                        }
-                    }
-
-                villager.quote
-                    ?.also {
-                        field {
-                            value = it
-                            inline = false
                         }
                     }
 

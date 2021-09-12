@@ -1,29 +1,20 @@
 package com.portalsoup.mrbutlertron.v2.data
 
-import com.portalsoup.mrbutlertron.v2.data.entity.RememberMe
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils.create
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
 
     val dataSource = "jdbc:h2:./database/app"
 
     fun init() {
-        val flyway = Flyway.configure().dataSource(DatabaseFactory.dataSource, "bot", null).load()
+        val flyway = Flyway.configure().dataSource(dataSource, "bot", null).load()
         migrateFlyway(flyway)
 
         Database.connect(hikari())
-        transaction {
-            create(RememberMe)
-        }
     }
-
-    suspend fun <T> dbQuery(block: suspend () -> T): T = newSuspendedTransaction { block() }
 
     private fun hikari(): HikariDataSource {
         val config = HikariConfig()

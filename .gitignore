@@ -5,3 +5,4 @@
 /database
 gradle.properties
 **/*.db
+**/.terraform.lock.hcl

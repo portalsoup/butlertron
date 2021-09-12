@@ -11,6 +11,8 @@ object Versions {
     const val slf4j = "1.7.30"
     const val logback = "1.2.3"
     const val discordJda = "4.2.0_227"
+    const val h2 = "1.4.200"
+    const val json = "20190722"
 
     // testing
     const val junit = "4.12"
@@ -34,9 +36,9 @@ object Dependencies {
     val hikari = "com.zaxxer:HikariCP:${Versions.hikari}"
     val flywayCore = "org.flywaydb:flyway-core:${Versions.flyway}"
 
-    val json = "org.json:json:20190722"
+    val json = "org.json:json:${Versions.json}"
 
-    val h2 = "com.h2database:h2:1.4.200"
+    val h2 = "com.h2database:h2:${Versions.h2}"
     val exposedCore = "org.jetbrains.exposed:exposed-core:${Versions.exposed}"
     val exposedDao = "org.jetbrains.exposed:exposed-dao:${Versions.exposed}"
     val exposedJdbc = "org.jetbrains.exposed:exposed-jdbc:${Versions.exposed}"

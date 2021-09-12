@@ -1,4 +1,6 @@
-package com.portalsoup.mrbutlertron.v2.dsl
+package com.portalsoup.mrbutlertron.v2.dsl.embed
+
+import com.portalsoup.mrbutlertron.v2.dsl.embed
 
 fun cardEmbed(lambda: CardBuilder.() -> Unit) = CardBuilder().apply(lambda).build()
 
@@ -20,17 +22,15 @@ class CardBuilder {
 
     fun build() = embed {
 
-        description = uri
+        author {
+            name = cardName
+            url = uri
+        }
 
         if (cardImage.isNotEmpty()) {
             thumbnail {
                 url = cardImage
             }
-        }
-
-        field {
-            value = cardName
-            inline = true
         }
 
         if (spellType.isNotEmpty()) {

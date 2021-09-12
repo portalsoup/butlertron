@@ -1,6 +1,6 @@
-create table REMEMBERME (
+create table FRIENDCODE (
     ID int not null AUTO_INCREMENT,
     DISCORDUSER varchar(255) not null,
-    NAME varchar(255),
+    NTDOCODE varchar(255) not null,
     PRIMARY KEY(ID)
 )
