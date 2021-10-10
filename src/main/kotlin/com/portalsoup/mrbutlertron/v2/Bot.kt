@@ -1,6 +1,6 @@
 package com.portalsoup.mrbutlertron.v2
 
-import com.portalsoup.mrbutlertron.v2.core.CommandLoader
+import com.portalsoup.mrbutlertron.v2.core.CommandAdapter
 import com.portalsoup.mrbutlertron.v2.core.getLogger
 import com.portalsoup.mrbutlertron.v2.data.DatabaseFactory
 import net.dv8tion.jda.api.JDABuilder
@@ -18,7 +18,7 @@ class Bot(val name: String, val token: String) {
         log.debug("token: ${token}")
 
         JDABuilder.createDefault(token)
-            .addEventListeners(CommandLoader(this))
+            .addEventListeners(CommandAdapter(this))
             .setAutoReconnect(true)
             .build()
             .awaitReady()

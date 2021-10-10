@@ -81,7 +81,7 @@ object VillagerApi {
             ?: url
 
         println("final url $apiUrl")
-        val raw = Api.makeRequest(apiUrl, mapOf("X-API-KEY" to Environment.nookpediaToken))
+        val raw = Environment.nookpediaToken?.let { Api.makeRequest(apiUrl, mapOf("X-API-KEY" to it)) }
         val json = JSONArray(raw)
 
 //        println(json)

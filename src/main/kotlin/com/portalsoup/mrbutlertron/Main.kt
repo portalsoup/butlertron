@@ -3,12 +3,11 @@ package com.portalsoup.mrbutlertron
 import com.portalsoup.mrbutlertron.Environment.name
 import com.portalsoup.mrbutlertron.Environment.token
 import com.portalsoup.mrbutlertron.v2.Bot
-import com.portalsoup.mrbutlertron.v2.core.CommandLoader
-import java.lang.RuntimeException
+import com.portalsoup.mrbutlertron.v2.core.CommandAdapter
 
 fun main(args: Array<String>) {
 
-    val commands = CommandLoader.load()
+    val commands = CommandAdapter.loadAll()
     println(commands)
 
     Bot(name, token).apply {
@@ -17,6 +16,7 @@ fun main(args: Array<String>) {
     }
 }
 
+// TODO make this not include secrets
 object Environment {
     val nookpediaToken = System.getProperty("nookipedia.token") ?: throw RuntimeException("Missing nookipedia token")
     val name = System.getProperty("discord.bot.name") ?: throw RuntimeException("Missing java property [discord.bot.name]")

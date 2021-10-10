@@ -12,8 +12,13 @@ import java.lang.RuntimeException
  *          is Failure -> throw x.error
  */
 sealed class Try<out T> {
+
     data class Success<out T>(val data: T): Try<T>()
+
     data class Failure(val error: Throwable): Try<Nothing>() {
+
+        constructor(reason: String): this(TryFailedException(reason))
+
         companion object {
             fun reason(reason: String): Failure {
                 return Failure(TryFailedException(reason))

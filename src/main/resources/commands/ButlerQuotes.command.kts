@@ -21,6 +21,17 @@ command {
     name = "Butlertron quotes"
     description = "Wesley!"
 
+    help {
+        description = ""
+        trigger = ""
+
+        action(
+            "",
+            "",
+            ""
+        )
+    }
+
     job {
         precondition { it.formattedMessage().matches("mr\\.*\\s*butlertron".toRegex()) }
         action { it.reply(availableMessages.random()) }

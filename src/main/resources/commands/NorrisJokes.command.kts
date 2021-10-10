@@ -9,6 +9,17 @@ command {
     name = "Chuck norris jokes"
     description = "Share random chuck norris jokes"
 
+    help {
+        description = ""
+        trigger = ""
+
+        action(
+            "",
+            "",
+            ""
+        )
+    }
+
     // TODO: This got into a loop because the joke output has "chuck norris" in it when the trigger phrase was the same.
     //  I think adding a sent message history table to prevent self replies that all messages check before
     //  running preconditions

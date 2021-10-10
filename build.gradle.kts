@@ -113,7 +113,15 @@ tasks {
     }
 
     build {
-        dependsOn(shadowJar)
+        dependsOn(shadowJar, "buildCommands")
+    }
+
+    create<JavaExec>("buildCommands") {
+        main = "com.portalsoup.mrbutlertron.v2.CommandHealthcheckKt"
+        classpath = sourceSets.main.get().runtimeClasspath
+        jvmArgs =  listOf(
+            "-Dcommands.location=$commandsLocation"
+        )
     }
 
     /*

@@ -6,6 +6,17 @@ command {
     name = "Shin-chan quotes"
     description = "A collection of shin-chan quotes"
 
+    help {
+        description = ""
+        trigger = ""
+
+        action(
+            "",
+            "",
+            ""
+        )
+    }
+
     job {
         precondition {
             it.formattedMessage().matches(Regex("do\\sone\\sof\\syour\\slittle\\sdances.*"))

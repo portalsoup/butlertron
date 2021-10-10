@@ -1,6 +1,5 @@
 package com.portalsoup.mrbutlertron.v2.core
 
-import net.dv8tion.jda.api.entities.ChannelType
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 

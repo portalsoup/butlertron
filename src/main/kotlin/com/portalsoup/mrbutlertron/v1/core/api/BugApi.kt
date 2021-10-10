@@ -39,12 +39,15 @@ data class BugDTO(
 object BugApi {
     val url = "https://api.nookipedia.com"
 
-    fun lookupBug(name: String): Try<BugDTO> {
-        val raw = Api.makeRequest("$url/nh/bugs/$name", mapOf("X-API-KEY" to Environment.nookpediaToken))
-        val json = JSONArray(raw)
+    fun lookupBug(name: String): Try<BugDTO> =
+        Environment.nookpediaToken
+            ?.let {
+                val raw = Api.makeRequest("$url/nh/bugs/$name", mapOf("X-API-KEY" to it))
+                val json = JSONArray(raw)
 
-        return parseBugJson(json)
-    }
+                return parseBugJson(json)
+            } ?: Try.Failure("No nookpedia token")
+
 
     fun parseBugJson(json: JSONArray): Try<BugDTO> {
         return if (json.length() > 1) {

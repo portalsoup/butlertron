@@ -6,8 +6,10 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 class Job(
     val run: (MessageReceivedEvent) -> Unit = { },
     val preconditions: MutableList<(MessageReceivedEvent) -> Boolean> = mutableListOf()
-)
+) {
 
+    fun shouldRun(event: MessageReceivedEvent): Boolean =  preconditions.toList().all { condition -> condition(event) }
+}
 class JobBuilder {
     var run: (MessageReceivedEvent) -> Unit = { }
     var preconditions: MutableList<(MessageReceivedEvent) -> Boolean> = mutableListOf()

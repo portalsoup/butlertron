@@ -8,6 +8,17 @@ command {
     name = "Yugioh card lookup"
     description = "Fetches an image from an online API to display"
 
+    help {
+        description = ""
+        trigger = ""
+
+        action(
+            "",
+            "",
+            ""
+        )
+    }
+
     job {
         precondition { it.formattedMessage().startsWith("!ygo") }
         action { event ->

@@ -24,6 +24,17 @@ command {
     name = "Animal crossing"
     description = "Lookup animal crossing resources"
 
+    help {
+        description = ""
+        trigger = ""
+
+        action(
+            "",
+            "",
+            ""
+        )
+    }
+
     job {
         precondition {
             it.formattedMessage().startsWith("!villager")

@@ -7,6 +7,17 @@ command {
     name = "Magic: The Gathering card lookup"
     description = "Fetches an image from an online API to display"
 
+    help {
+        description = ""
+        trigger = ""
+
+        action(
+            "",
+            "",
+            ""
+        )
+    }
+
     job {
         precondition { it.formattedMessage().startsWith("!embed") }
         action { event ->
