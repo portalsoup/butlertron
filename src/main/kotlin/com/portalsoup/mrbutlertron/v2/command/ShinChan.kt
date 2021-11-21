@@ -2,7 +2,7 @@ import com.portalsoup.mrbutlertron.v2.core.formattedMessage
 import com.portalsoup.mrbutlertron.v2.core.reply
 import com.portalsoup.mrbutlertron.v2.dsl.command
 
-command {
+val shinChan = command {
     name = "Shin-chan quotes"
     description = "A collection of shin-chan quotes"
     command = "shin"

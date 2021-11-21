@@ -5,7 +5,7 @@ import com.portalsoup.mrbutlertron.v2.dsl.embed
 import com.portalsoup.mrbutlertron.v2.dsl.embed.ListEmbed
 import com.portalsoup.mrbutlertron.v2.manager.FriendCodeManager
 
-command {
+val friendCode = command {
     name = "Friend Codes"
     description = ""
     command = "friendcode"

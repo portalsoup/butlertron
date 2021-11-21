@@ -1,7 +1,6 @@
 package com.portalsoup.mrbutlertron.v2.dsl
 
 import com.portalsoup.mrbutlertron.Environment
-import com.portalsoup.mrbutlertron.v2.core.CommandAdapter
 import com.portalsoup.mrbutlertron.v2.core.formattedMessage
 import com.portalsoup.mrbutlertron.v2.core.getLogger
 import com.portalsoup.mrbutlertron.v2.core.reply
@@ -80,9 +79,10 @@ class CommandBuilder {
         val jobs = jobs.flatMap {
             listOf(
                 it,
-                buildHelpJobFor(it)
+//                buildHelpJobFor(it)
             )
-        } + buildOuterHelpJob()
+        }
+//        + buildOuterHelpJob()
 
         return Command(
             name = name,

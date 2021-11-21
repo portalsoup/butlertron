@@ -17,7 +17,7 @@ val availableMessages = listOf(
     "Maybe some overpriced knick-knacks will add a touch of class."
 )
 
-command {
+val butlerQuotes = command {
     name = "Butlertron quotes"
     command = "butlertron"
     description = "Wesley!"

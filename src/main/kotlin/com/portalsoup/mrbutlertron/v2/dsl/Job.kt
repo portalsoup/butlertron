@@ -28,11 +28,11 @@ class JobBuilder(val name: String, val command: String, val isHelpJob: Boolean =
     init {
         preconditions = mutableListOf({ event: MessageReceivedEvent -> event.checkMessagePredicate { true } })
 
-        if (! isHelpJob) {
-            preconditions.add { event: MessageReceivedEvent ->
-                ! event.formattedMessage().matches(".*help$".toRegex())
-            }
-        }
+//        if (! isHelpJob) {
+//            preconditions.add { event: MessageReceivedEvent ->
+//                ! event.formattedMessage().matches(".*help$".toRegex())
+//            }
+//        }
     }
 
     // TODO why can't this be lateinit without failing when compiled from scripts

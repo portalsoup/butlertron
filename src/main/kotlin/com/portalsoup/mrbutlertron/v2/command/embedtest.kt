@@ -2,7 +2,7 @@ import com.portalsoup.mrbutlertron.v2.core.reply
 import com.portalsoup.mrbutlertron.v2.dsl.command
 import com.portalsoup.mrbutlertron.v2.dsl.embed
 
-command {
+val embedTest = command {
     name = "Embedded message api test"
     command = "embed"
     description = "Displays a test embedded message"

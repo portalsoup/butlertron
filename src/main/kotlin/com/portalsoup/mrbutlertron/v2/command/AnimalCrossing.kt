@@ -18,7 +18,7 @@ fun getVillager(name: String? = null, species: String? = null, personality: Stri
     }
 }
 
-command {
+val villagerLookup = command {
     name = "Animal crossing"
     command = "ac"
     description = "Lookup animal crossing resources"

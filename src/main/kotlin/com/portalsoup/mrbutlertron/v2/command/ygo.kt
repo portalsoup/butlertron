@@ -4,7 +4,7 @@ import com.portalsoup.mrbutlertron.v2.core.reply
 import com.portalsoup.mrbutlertron.v2.dsl.command
 import kotlinx.coroutines.runBlocking
 
-command {
+val ygo = command {
     name = "Yugioh card lookup"
     command = "ygo"
     description = "Fetches an image from an online API to display"

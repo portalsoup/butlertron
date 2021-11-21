@@ -1,11 +1,10 @@
 import com.portalsoup.mrbutlertron.v2.core.api.Api
-import com.portalsoup.mrbutlertron.v2.core.formattedMessage
 import com.portalsoup.mrbutlertron.v2.core.reply
 import com.portalsoup.mrbutlertron.v2.dsl.command
 import org.json.JSONObject
 import java.lang.RuntimeException
 
-command {
+val norrisJokes = command {
     name = "Chuck norris jokes"
     description = "Share random chuck norris jokes"
     command = "norris"
