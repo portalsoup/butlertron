@@ -1,24 +1,43 @@
 package com.portalsoup.mrbutlertron.v2
 
-import com.portalsoup.mrbutlertron.v2.core.CommandAdapter
+import butlerQuotes
+import com.portalsoup.mrbutlertron.v2.core.CommandLoader
 import com.portalsoup.mrbutlertron.v2.core.getLogger
 import com.portalsoup.mrbutlertron.v2.data.DatabaseFactory
+import embedTest
+import friendCode
+import mtg
 import net.dv8tion.jda.api.JDABuilder
+import norrisJokes
+import pokedex
+import shinChan
+import villagerLookup
+import ygo
 
 class Bot(val name: String, val token: String) {
 
-    private val log = getLogger(javaClass)
+    private val discordCommands = CommandLoader(
+        this, setOf(
+            villagerLookup,
+            butlerQuotes,
+            embedTest,
+            friendCode,
+            mtg,
+            norrisJokes,
+            pokedex,
+            shinChan,
+            ygo
+        )
+    )
 
-    fun isEnumTypeValid(enumClass: Class<*>, value: String) = enumClass.enumConstants
-            ?.let { it as Array<Enum<*>> }
-            ?.firstOrNull { it.name.equals(value, true) } != null
+    private val log = getLogger(javaClass)
 
     val jda by lazy {
         val token = token
         log.debug("token: ${token}")
 
         JDABuilder.createDefault(token)
-            .addEventListeners(CommandAdapter)
+            .addEventListeners(discordCommands)
             .setAutoReconnect(true)
             .build()
             .awaitReady()
