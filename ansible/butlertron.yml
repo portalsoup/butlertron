@@ -25,14 +25,6 @@
         state: directory
         mode: '0755'
 
-    - name: Copy commands
-      copy:
-        src: ../src/main/resources/com/portalsoup/mrbutlertron/v2/core/commands/
-        dest: /srv/butlertron/commands/
-        mode: '+x'
-      notify:
-        - restart_butlertron
-
     - name: Copy bot and unzip
       copy:
         src: ../build/libs/shadow-1.0-SNAPSHOT-all.jar

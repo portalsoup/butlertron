@@ -2,9 +2,10 @@ import com.portalsoup.mrbutlertron.build.dependencies.Dependencies
 
 plugins {
     application
-    kotlin("jvm") version "1.3.70"
+    kotlin("jvm") version "1.6.0"
     id("org.flywaydb.flyway") version "6.4.0"
     id("com.github.johnrengelman.shadow") version "5.1.0"
+    kotlin("plugin.serialization") version "1.6.0"
 }
 
 project.group = "com.portalsoup"
@@ -18,7 +19,7 @@ val ansibleDeployIP: String by project
 val deploySshId: String by project
 val botGithubUrl: String by project
 val doToken: String by project
-val commandsLocation: String by project
+val botPrefix: String by project
 
 val pathToAnsibleInventory = "$rootDir/ansible/inventory"
 
@@ -64,6 +65,15 @@ dependencies {
     implementation(Dependencies.flywayCore)
 
     testImplementation(Dependencies.testng)
+
+    // https://mvnrepository.com/artifact/me.sargunvohra.lib/pokekotlin
+//    implementation("me.sargunvohra.lib:pokekotlin:2.3.0")
+
+//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.0")
+
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-serialization-json
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
+
 }
 
 application {
@@ -73,7 +83,7 @@ application {
         "-Ddiscord.bot.name=${discordBotName}",
         "-Dnookipedia.token=${nookipediaToken}",
         "-Dgithub.url=${botGithubUrl}",
-        "-Dcommands.location=$commandsLocation"
+        "-Dcommand.prefix=$botPrefix"
     )
 }
 
@@ -114,14 +124,6 @@ tasks {
 
     build {
         dependsOn(shadowJar, "buildCommands")
-    }
-
-    create<JavaExec>("buildCommands") {
-        main = "com.portalsoup.mrbutlertron.v2.CommandHealthcheckKt"
-        classpath = sourceSets.main.get().runtimeClasspath
-        jvmArgs =  listOf(
-            "-Dcommands.location=$commandsLocation"
-        )
     }
 
     /*
@@ -221,7 +223,7 @@ tasks {
                 workingDir("$rootDir/ansible")
                 commandLine("ansible-playbook",
                     "-u", sshUser,
-                    "--extra-vars", "{\"nookipedia\": ${nookipediaToken}, \"bot\": ${discordBotToken}, \"commandsDir\": $commandsLocation}",
+                    "--extra-vars", "{\"nookipedia\": $nookipediaToken, \"bot\": $discordBotToken, \"prefix\": \"$botPrefix\"}",
                     "-i", pathToAnsibleInventory,
                     "--flush-cache",
                     "butlertron.yml"
