@@ -5,19 +5,15 @@ import com.portalsoup.mrbutlertron.v2.dsl.command
 command {
     name = "Shin-chan quotes"
     description = "A collection of shin-chan quotes"
+    command = "shin"
 
-    help {
-        description = ""
-        trigger = ""
+    job("Ass dance chocobees") {
+        help {
+            description = ""
+            trigger = ""
+            example { "" }
+        }
 
-        action(
-            "",
-            "",
-            ""
-        )
-    }
-
-    job {
         precondition {
             it.formattedMessage().matches(Regex("do\\sone\\sof\\syour\\slittle\\sdances.*"))
         }
@@ -27,7 +23,13 @@ command {
         }
     }
 
-    job {
+    job("Motorway to the floaterway") {
+        help {
+            description = ""
+            trigger = ""
+            example { "" }
+        }
+
         precondition {
             it.formattedMessage().contains("i've got a meal on the motorway to the floater-way. you say?")
         }
@@ -36,7 +38,13 @@ command {
         }
     }
 
-    job {
+    job("One box one cheek") {
+        help {
+            description = ""
+            trigger = ""
+            example { "" }
+        }
+
         precondition {
             it.formattedMessage().equals("what'll i get for one box?")
         }

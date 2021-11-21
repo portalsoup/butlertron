@@ -4,6 +4,9 @@ import com.portalsoup.mrbutlertron.Environment
 import com.portalsoup.mrbutlertron.v2.core.Try
 import com.portalsoup.mrbutlertron.v2.core.TryFailedException
 import com.portalsoup.mrbutlertron.v2.dsl.embed
+import com.portalsoup.mrbutlertron.v2.dto.animalcrossing.Game
+import com.portalsoup.mrbutlertron.v2.dto.animalcrossing.Personality
+import com.portalsoup.mrbutlertron.v2.dto.animalcrossing.Species
 import net.dv8tion.jda.api.entities.MessageEmbed
 import org.json.JSONArray
 import org.json.JSONObject
@@ -202,66 +205,3 @@ object VillagerApi {
 
 }
 
-enum class Species {
-    Alligator,
-    Anteater,
-    Bear,
-    `Bear cub`,
-    Bird,
-    Bull,
-    Cat,
-    Cub,
-    Chicken,
-    Cow,
-    Deer,
-    Dog,
-    Duck,
-    Eagle,
-    Elephant,
-    Frog,
-    Goat,
-    Gorilla,
-    Hamster,
-    Hippo,
-    Horse,
-    Koala,
-    Kangaroo,
-    Lion,
-    Monkey,
-    Mouse,
-    Octopus,
-    Ostrich,
-    Penguin,
-    Pig,
-    Rabbit,
-    Rhino,
-    Sheep,
-    Quirrel,
-    Tiger,
-    Wolf;
-}
-
-enum class Personality {
-    Lazy,
-    Jock,
-    Cranky,
-    Smug,
-    Normal,
-    Peppy,
-    Snooty,
-    Sisterly;
-}
-
-enum class Game {
-    DNM,
-    AC,
-    E_PLUS,
-    WW,
-    CF,
-    NL,
-    WA,
-    NH,
-    FILM,
-    HHD,
-    PD;
-}

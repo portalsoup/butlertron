@@ -18,7 +18,7 @@ class Bot(val name: String, val token: String) {
         log.debug("token: ${token}")
 
         JDABuilder.createDefault(token)
-            .addEventListeners(CommandAdapter(this))
+            .addEventListeners(CommandAdapter)
             .setAutoReconnect(true)
             .build()
             .awaitReady()

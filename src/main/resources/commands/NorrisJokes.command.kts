@@ -8,23 +8,18 @@ import java.lang.RuntimeException
 command {
     name = "Chuck norris jokes"
     description = "Share random chuck norris jokes"
-
-    help {
-        description = ""
-        trigger = ""
-
-        action(
-            "",
-            "",
-            ""
-        )
-    }
+    command = "norris"
 
     // TODO: This got into a loop because the joke output has "chuck norris" in it when the trigger phrase was the same.
     //  I think adding a sent message history table to prevent self replies that all messages check before
     //  running preconditions
-    job {
-        precondition { it.formattedMessage().matches(Regex("!norris")) }
+    job("Get a chuck norris joke") {
+        help {
+            description = ""
+            trigger = ""
+            example { "" }
+        }
+
         action {
             val jokeUrl = "http://api.icndb.com/jokes/random?exclude=[explicit]"
             val response = JSONObject(Api.makeRequest(jokeUrl))

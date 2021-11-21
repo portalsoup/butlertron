@@ -17,3 +17,7 @@ fun MessageReceivedEvent.formattedMessage(): String {
         .toLowerCase()
         .trim()
 }
+
+interface EmbeddableEntity {
+    fun embed(): MessageEmbed
+}

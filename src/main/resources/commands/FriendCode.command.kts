@@ -8,19 +8,16 @@ import com.portalsoup.mrbutlertron.v2.manager.FriendCodeManager
 command {
     name = "Friend Codes"
     description = ""
+    command = "friendcode"
 
-    help {
-        description = "Share Nintendo friend codes with guildmates"
-        trigger = "!friendcode"
+    //Break up into 3 jobs
+    job("Operate on and request friend codes") {
+        help {
+            description = ""
+            trigger = ""
+            example { "" }
+        }
 
-        action(
-            "!friendcode @someUser",
-            "",
-            ""
-        )
-    }
-
-    job {
         precondition { it.formattedMessage().startsWith("!friendcode") }
         action { message ->
             FriendCodeManager.parseCommandMessage(message)

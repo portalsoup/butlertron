@@ -22,5 +22,6 @@ object Environment {
     val name = System.getProperty("discord.bot.name") ?: throw RuntimeException("Missing java property [discord.bot.name]")
     val token = System.getProperty("discord.bot.token") ?: throw RuntimeException("Missing java property [discord.bot.token]")
     val githubUrl: String? = System.getProperty("github.url")
-    val commandsLocation: String = System.getProperty("commands.location")
+    val commandsLocation: String = System.getProperty("command.location")
+    val commandPrefix: String = System.getProperty("command.prefix")
 }

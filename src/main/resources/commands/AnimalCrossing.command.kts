@@ -1,10 +1,8 @@
 import com.portalsoup.mrbutlertron.v2.core.Try
 import com.portalsoup.mrbutlertron.v2.core.TryFailedException
-import com.portalsoup.mrbutlertron.v2.core.api.Personality
-import com.portalsoup.mrbutlertron.v2.core.api.Species
+import com.portalsoup.mrbutlertron.v2.dto.animalcrossing.Personality
+import com.portalsoup.mrbutlertron.v2.dto.animalcrossing.Species
 import com.portalsoup.mrbutlertron.v2.core.api.VillagerApi
-import com.portalsoup.mrbutlertron.v2.core.api.VillagerDTO
-import com.portalsoup.mrbutlertron.v2.core.formattedMessage
 import com.portalsoup.mrbutlertron.v2.core.reply
 import com.portalsoup.mrbutlertron.v2.dsl.command
 import kotlinx.coroutines.runBlocking
@@ -22,22 +20,31 @@ fun getVillager(name: String? = null, species: String? = null, personality: Stri
 
 command {
     name = "Animal crossing"
+    command = "ac"
     description = "Lookup animal crossing resources"
-
     help {
-        description = ""
-        trigger = ""
-
-        action(
-            "",
-            "",
-            ""
-        )
+        description = "Lookup things from animal crossing.  Villagers only for now."
+        trigger = "${prefix}ac"
+        example { "${prefix}ac villager -name=bam" }
+        example { "${prefix}ac villager -species=deer" }
+        example { "${prefix}ac villager -personality=jock" }
     }
 
-    job {
-        precondition {
-            it.formattedMessage().startsWith("!villager")
+    job("Villager lookup") {
+        help {
+            description = "Lookup villager from animal crossing."
+            trigger = "${prefix}ac villager"
+            example { "${prefix}ac villager -name=bam" }
+            example { "${prefix}ac villager -species=deer" }
+            example { "${prefix}ac villager -personality=jock" }
+            imageUrl { "https://static.wikia.nocookie.net/logopedia/images/d/d2/Animal_Crossing_logo.png" }
+        }
+
+        precondition { event ->
+            event.checkMessagePredicate {
+                println("OK predicate run $it")
+                it == "villager"
+            }
         }
         action { event ->
             val message = event.message.contentRaw

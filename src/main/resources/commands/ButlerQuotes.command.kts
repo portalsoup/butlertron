@@ -19,20 +19,16 @@ val availableMessages = listOf(
 
 command {
     name = "Butlertron quotes"
+    command = "butlertron"
     description = "Wesley!"
 
-    help {
-        description = ""
-        trigger = ""
+    job("butlertron quotes") {
+        help {
+            description = ""
+            trigger = ""
+            example { "" }
+        }
 
-        action(
-            "",
-            "",
-            ""
-        )
-    }
-
-    job {
         precondition { it.formattedMessage().matches("mr\\.*\\s*butlertron".toRegex()) }
         action { it.reply(availableMessages.random()) }
     }

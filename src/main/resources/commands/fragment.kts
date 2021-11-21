@@ -5,18 +5,16 @@ import com.portalsoup.mrbutlertron.v2.dsl.command
 command {
     name = TODO()
     description = TODO()
+    command = TODO()
 
-    help {
-        description = TODO()
-        trigger = TODO()
 
-        action(
-            TODO(),
-            TODO()
-        )
-    }
+    job(TODO()) {
+        help {
+            description = ""
+            trigger = ""
+            example { "" }
+        }
 
-    job {
         precondition { TODO() }
         action { event -> TODO() }
     }

@@ -15,7 +15,7 @@ object CommandAdapter : ListenerAdapter() {
     private val history: Array<String> = arrayOf("", "", "", "", "", "", "", "", "", "")
     private var currentIndex: Int = 0
 
-    private val loadedCommands: List<Command> = loadAll()
+    val loadedCommands: List<Command> = loadAll()
 
     private fun getCommandList(): Sequence<File> = File(Environment.commandsLocation)
         .takeIf { it.isDirectory }

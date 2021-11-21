@@ -6,21 +6,19 @@ import kotlinx.coroutines.runBlocking
 
 command {
     name = "Yugioh card lookup"
+    command = "ygo"
     description = "Fetches an image from an online API to display"
 
-    help {
-        description = ""
-        trigger = ""
+    job("Yugioh card lookup") {
+        help {
+            description = ""
+            trigger = ""
+            example { "" }
+        }
 
-        action(
-            "",
-            "",
-            ""
-        )
-    }
-
-    job {
-        precondition { it.formattedMessage().startsWith("!ygo") }
+        precondition { event ->
+            event.checkMessagePredicate { it.isNotEmpty() }
+        }
         action { event ->
             val jpg = event.formattedMessage()
                 .replace("!ygo", "")

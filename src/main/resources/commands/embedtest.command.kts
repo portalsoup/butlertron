@@ -1,25 +1,20 @@
-import com.portalsoup.mrbutlertron.v2.core.formattedMessage
 import com.portalsoup.mrbutlertron.v2.core.reply
 import com.portalsoup.mrbutlertron.v2.dsl.command
 import com.portalsoup.mrbutlertron.v2.dsl.embed
 
 command {
-    name = "Magic: The Gathering card lookup"
-    description = "Fetches an image from an online API to display"
+    name = "Embedded message api test"
+    command = "embed"
+    description = "Displays a test embedded message"
 
-    help {
-        description = ""
-        trigger = ""
+    job("Display a test embed") {
 
-        action(
-            "",
-            "",
-            ""
-        )
-    }
+        help {
+            description = ""
+            trigger = ""
+            example { "" }
+        }
 
-    job {
-        precondition { it.formattedMessage().startsWith("!embed") }
         action { event ->
             embed {
                 author {

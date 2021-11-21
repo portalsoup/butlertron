@@ -21,7 +21,7 @@ object Versions {
 }
 object Dependencies {
 
-    val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib"
     val kotlinScriptRuntime = "org.jetbrains.kotlin:kotlin-script-runtime"
     val kotlinCompilerEmbeddable= "org.jetbrains.kotlin:kotlin-compiler-embeddable"
     val kotlinScriptUtil = "org.jetbrains.kotlin:kotlin-script-util"
